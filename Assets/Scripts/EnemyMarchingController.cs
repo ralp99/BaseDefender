@@ -14,11 +14,8 @@ public class EnemyMarchingController : MonoBehaviour
 
     private float currentEnemyMarchSpeed = 0;
 
-
     float newYpos = 0;
-    bool did1st = false;
     bool shouldDescend = false;
-
 
     private float furthestEnemyPosLeft;
     private float furthestEnemyPosRight;
@@ -47,6 +44,10 @@ public class EnemyMarchingController : MonoBehaviour
         for (int i = 0; i < enemyColumns; i++)
         {
             lastPlacedEnemyX = enemySpawnBegin.x - paddingEnemyX;
+            if (i == 0)
+            {
+                   newYpos = enemySpawnBegin.y;
+            }
 
             for (int j = 0; j < enemyRows; j++)
             {
@@ -83,12 +84,6 @@ public class EnemyMarchingController : MonoBehaviour
         Transform enemyTransform = currentEnemy.GetComponent<Transform>();
         enemyTransform.SetParent(rAGameManager.GameParent);
         float newXpos = lastPlacedEnemyX + paddingEnemyX;
-
-        if (!did1st)
-        {
-            did1st = true;
-            newYpos = enemySpawnBegin.y;
-        }
 
         lastPlacedEnemyX = newXpos;
         lastPlacedEnemyY = newYpos;

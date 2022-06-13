@@ -1,9 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class ControllerManager : MonoBehaviour
 {
+    public float ButtonThrottleDelay = 0.1f;
+    enum ButtonsToLock { ButtonA, ButtonB, ButtonX, ButtonY}
 
     public bool LB;
     public bool RB;
@@ -16,8 +19,6 @@ public class ControllerManager : MonoBehaviour
     public bool ButtonA;
     public bool ButtonY;
     public bool ButtonX;
-
-
 
     public float Ltrigger;
     public float Rtrigger;
@@ -54,6 +55,11 @@ public class ControllerManager : MonoBehaviour
     private string rJoyLeftX = "360_RightJoystickX";
     private string rJoyLeftY = "360_RightJoystickY";
 
+    public static event Action OnLeftThumbstick;
+    public static event Action OnRightThumbstick;
+    public static event Action OnAbuttonPress;
+    public static event Action OnYbuttonPress;
+
 
 
     void Start()
@@ -80,5 +86,74 @@ public class ControllerManager : MonoBehaviour
         LstickY = Input.GetAxis(lJoyLeftY);
         RstickX = Input.GetAxis(rJoyLeftX);
         RstickY = Input.GetAxis(rJoyLeftY);
+
+        if (LstickX <0)
+        {
+            OnLeftThumbstick?.Invoke();
+        }
+
+        if (LstickX > 0)
+        {
+            OnRightThumbstick?.Invoke();
+        }
+
+        if (ButtonA)
+        {
+            if (buttonAdelaying)
+            {
+                return;
+            }
+
+            StartCoroutine(ButtonLocker(ButtonsToLock.ButtonA));
+            OnAbuttonPress?.Invoke();
+        }
+
+        if (ButtonY)
+        {
+            if (buttonYdelaying)
+            {
+                return;
+            }
+
+            StartCoroutine(ButtonLocker(ButtonsToLock.ButtonY));
+            OnYbuttonPress?.Invoke();
+        }
+
     }
+
+    bool buttonAdelaying;
+    bool buttonBdelaying;
+    bool buttonXdelaying;
+    bool buttonYdelaying;
+
+
+    IEnumerator ButtonLocker (ButtonsToLock lockButton)
+    {
+        ChangeButtonLockState(lockButton, true);
+        yield return new WaitForSeconds(ButtonThrottleDelay);
+        ChangeButtonLockState(lockButton, false);
+    }
+
+    void ChangeButtonLockState(ButtonsToLock lockButton, bool lockState)
+    {
+        switch (lockButton)
+        {
+            case ButtonsToLock.ButtonA:
+                buttonAdelaying = lockState;
+                break;
+            case ButtonsToLock.ButtonB:
+                buttonBdelaying = lockState;
+                break;
+            case ButtonsToLock.ButtonX:
+                buttonXdelaying = lockState;
+                break;
+            case ButtonsToLock.ButtonY:
+                buttonYdelaying = lockState;
+                break;
+            default:
+                break;
+        }
+    }
+
+
 }

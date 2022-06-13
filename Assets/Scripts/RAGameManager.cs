@@ -23,6 +23,7 @@ public class RAGameManager : MonoBehaviour
 
     public float EnemyMarchSpeed = 0.25f;
     public float EnemyDescendAmount = 0.0f;
+    public float HeroTravelSpeed = 1.0f;
 
 
     ///game settings
@@ -51,8 +52,6 @@ public class RAGameManager : MonoBehaviour
     public Vector2 EnemySpawnBegin;
 
     [Space]
-//    public float LastPlacedEnemyX;
-//    public float LastPlacedEnemyY;
     public int EnemyColumns;
     public int EnemyRows;
 
@@ -175,6 +174,11 @@ public class RAGameManager : MonoBehaviour
             FireButtonAction();
         }
 
+        if (GameIsPaused)
+        {
+            return;
+        }
+
         GameLoop();
     }
 
@@ -183,7 +187,7 @@ public class RAGameManager : MonoBehaviour
     {
 
         GameObject newHeroObject = null;
-        newHeroObject = Instantiate(EnemyObjectSource) as GameObject;
+        newHeroObject = Instantiate(HeroShipTransformSource) as GameObject;
         //  currentEnemy = newEnemyObject.GetComponent<CharacterObject>();
         HeroShipTransform = newHeroObject.transform;
         HeroShipTransform.SetParent(GameParent);

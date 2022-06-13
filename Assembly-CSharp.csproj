@@ -71,6 +71,7 @@
     <Compile Include="Assets\Scripts\ControllerManager.cs" />
     <Compile Include="Assets\Scripts\EnemyMarchingController.cs" />
     <Compile Include="Assets\Scripts\Health.cs" />
+    <Compile Include="Assets\Scripts\HeroShipController.cs" />
     <Compile Include="Assets\Scripts\RAGameManager.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/Work/HCG/BaseDefender/ST/BaseDefender/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>

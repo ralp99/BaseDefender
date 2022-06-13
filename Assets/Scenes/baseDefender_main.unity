@@ -162,6 +162,7 @@ GameObject:
   - component: {fileID: 556115954}
   - component: {fileID: 556115955}
   - component: {fileID: 556115956}
+  - component: {fileID: 556115957}
   m_Layer: 0
   m_Name: gameManager
   m_TagString: Untagged
@@ -202,10 +203,12 @@ MonoBehaviour:
   MovementSpeedMultiplierEnemy: 1
   EnemyMarchSpeed: 0.025
   EnemyDescendAmount: 0.5
+  HeroTravelSpeed: 0.15
   GameIsPaused: 0
   EnemyObjectSource: {fileID: 6122161258633207358, guid: 1b95f3e710020e24eb14c433bfe9c1b6,
     type: 3}
-  HeroShipTransformSource: {fileID: 0}
+  HeroShipTransformSource: {fileID: 6122161258633207358, guid: 090f5c9c8811ea64ca3769c4263c51bc,
+    type: 3}
   GameParent: {fileID: 1731169628}
   HeroShipTransform: {fileID: 0}
   GamefieldXMin: 0
@@ -239,6 +242,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 121d7a6533f2e0242a6feab922ee0114, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ButtonThrottleDelay: 0.25
   LB: 0
   RB: 0
   Dup: 0
@@ -273,6 +277,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 30802d397a1079748b80a790acf5c2b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &556115957
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 556115952}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32e678ae3c7b94042b70f92fd2ad1e5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &664982063
