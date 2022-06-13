@@ -171,7 +171,6 @@ public class RAGameManager : MonoBehaviour
         if (!did1st)
         {
             did1st = true;
-            newXpos = EnemySpawnBegin.x;
             newYpos = EnemySpawnBegin.y;
         }
 
@@ -214,13 +213,13 @@ public class RAGameManager : MonoBehaviour
     {
         for (int i = 0; i < EnemyColumns; i++)
         {
+            LastPlacedEnemyX = EnemySpawnBegin.x - PaddingEnemyX;
+
             for (int j = 0; j < EnemyRows; j++)
             {
                 SpawnEnemy();
             }
-
             newYpos += PaddingEnemyY;
-            LastPlacedEnemyX = EnemySpawnBegin.x - PaddingEnemyX;
         }
 
         PerformAllEnemyPosChecks(false);
@@ -304,7 +303,6 @@ public class RAGameManager : MonoBehaviour
         }
 
         PerformAllEnemyPosChecks(true);
-
 
     }
 

@@ -214,7 +214,7 @@ MonoBehaviour:
   HorizontalRangeBorder: 5
   PaddingEnemyX: 3
   PaddingEnemyY: 4
-  EnemySpawnBegin: {x: -15, y: 5}
+  EnemySpawnBegin: {x: -15, y: 20}
   LastPlacedEnemyX: 0
   LastPlacedEnemyY: 0
   EnemyColumns: 5
