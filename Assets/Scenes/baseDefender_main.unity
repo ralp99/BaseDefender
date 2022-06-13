@@ -161,6 +161,7 @@ GameObject:
   - component: {fileID: 556115953}
   - component: {fileID: 556115954}
   - component: {fileID: 556115955}
+  - component: {fileID: 556115956}
   m_Layer: 0
   m_Name: gameManager
   m_TagString: Untagged
@@ -215,8 +216,6 @@ MonoBehaviour:
   PaddingEnemyX: 3
   PaddingEnemyY: 4
   EnemySpawnBegin: {x: -15, y: 20}
-  LastPlacedEnemyX: 0
-  LastPlacedEnemyY: 0
   EnemyColumns: 5
   EnemyRows: 11
   LivesRemaining: 0
@@ -228,10 +227,6 @@ MonoBehaviour:
   EnemyBulletPoolDead: []
   HeroBulletPoolActive: []
   HeroBulletPoolDead: []
-  furthestEnemyPosLeft: 0
-  furthestEnemyPosRight: 0
-  furthestEnemyPosDown: 0
-  EnemiesMarchLeft: 1
 --- !u!114 &556115955
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -268,6 +263,18 @@ MonoBehaviour:
   RstickHLimitPos: 0
   RstickVLimitNeg: 0
   RstickVLimitPos: 0
+--- !u!114 &556115956
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 556115952}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30802d397a1079748b80a790acf5c2b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &664982063
 GameObject:
   m_ObjectHideFlags: 0
