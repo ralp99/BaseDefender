@@ -22,6 +22,8 @@ public class RAGameManager : MonoBehaviour
 
     public float EnemyMarchSpeed = 0.25f;
     float currentEnemyMarchSpeed = 0;
+    public float EnemyDescendAmount = 0.0f;
+
 
     ///game settings
     ///
@@ -30,9 +32,11 @@ public class RAGameManager : MonoBehaviour
 
     // sources
     public GameObject EnemyObjectSource;
+    public GameObject HeroShipTransformSource;
 
     //ingame entities
     public Transform GameParent;
+    public Transform HeroShipTransform;
 
     public float GamefieldXMin;
     public float GamefieldXMax;
@@ -44,6 +48,7 @@ public class RAGameManager : MonoBehaviour
     [Space]
     public float PaddingEnemyX;
     public float PaddingEnemyY;
+    public Vector2 EnemySpawnBegin;
 
     [Space]
     public float LastPlacedEnemyX;
@@ -139,6 +144,7 @@ public class RAGameManager : MonoBehaviour
     public float furthestEnemyPosDown;
     public bool EnemiesMarchLeft = true;
 
+    bool did1st = false;
 
     void SpawnEnemy()
     {
@@ -161,18 +167,23 @@ public class RAGameManager : MonoBehaviour
         Transform enemyTransform = currentEnemy.GetComponent<Transform>();
         enemyTransform.SetParent(GameParent);
         float newXpos = LastPlacedEnemyX + PaddingEnemyX;
-      
+
+        if (!did1st)
+        {
+            did1st = true;
+            newXpos = EnemySpawnBegin.x;
+            newYpos = EnemySpawnBegin.y;
+        }
+
         LastPlacedEnemyX = newXpos;
         LastPlacedEnemyY = newYpos;
 
         enemyTransform.localPosition = new Vector3(newXpos, newYpos, 0);
-
-        
-
     }
 
     float newYpos = 0;
-    
+    bool shouldDescend = false;
+
 
 
     void EnemyPositionCheck(Transform enemyPos)
@@ -209,7 +220,7 @@ public class RAGameManager : MonoBehaviour
             }
 
             newYpos += PaddingEnemyY;
-            LastPlacedEnemyX = 0;
+            LastPlacedEnemyX = EnemySpawnBegin.x - PaddingEnemyX;
         }
 
         PerformAllEnemyPosChecks(false);
@@ -223,21 +234,22 @@ public class RAGameManager : MonoBehaviour
     // called from GL
     void PerformAllEnemyPosChecks(bool doMarchEnemy)
     {
+        shouldDescend = false;
+
         for (int i = 0; i < EnemyPoolActive.Count; i++)
         {
             Transform currentEnemyTransform = EnemyPoolActive[i].transform;
             EnemyPositionCheck(currentEnemyTransform);
             if (doMarchEnemy)
             {
-                bool canReverseMarch = i == EnemyPoolActive.Count-1;
-
-                // count is 55
-                // i is 0-54
-
+                bool canReverseMarch = i == 0;
                 MarchEnemy(currentEnemyTransform, canReverseMarch);
             }
         }
     }
+
+
+
 
     void MarchEnemy(Transform currentEnemyTransform, bool canReverseMarch)
     {
@@ -251,6 +263,7 @@ public class RAGameManager : MonoBehaviour
                 {
                     EnemiesMarchLeft = true;
                     furthestEnemyPosRight = 0;
+                    shouldDescend = true;
                 }
             }
             else
@@ -259,6 +272,7 @@ public class RAGameManager : MonoBehaviour
                 {
                     EnemiesMarchLeft = false;
                     furthestEnemyPosLeft = 0;
+                    shouldDescend = true;
                 }
             }
         }
@@ -271,6 +285,10 @@ public class RAGameManager : MonoBehaviour
 
         float assignXpos = currentEnemyTransform.localPosition.x + newXpos;
         float assignYpos = currentEnemyTransform.localPosition.y;
+        if (shouldDescend)
+        {
+            assignYpos -= EnemyDescendAmount;
+        }
 
         currentEnemyTransform.localPosition = new Vector3(assignXpos, assignYpos, 0);
 
@@ -302,6 +320,7 @@ public class RAGameManager : MonoBehaviour
     void Start()
     {
         SpawnEnemySet();
+        CreateHeroShipTransform();
         currentEnemyMarchSpeed = EnemyMarchSpeed;
     }
 
@@ -315,6 +334,19 @@ public class RAGameManager : MonoBehaviour
 
         GameLoop();
     }
+
+
+    void CreateHeroShipTransform()
+    {
+
+        GameObject newHeroObject = null;
+        newHeroObject = Instantiate(EnemyObjectSource) as GameObject;
+        //  currentEnemy = newEnemyObject.GetComponent<CharacterObject>();
+        HeroShipTransform = newHeroObject.transform;
+        HeroShipTransform.SetParent(GameParent);
+
+    }
+
 
     public void ChangePauseState()
     {

@@ -199,11 +199,14 @@ MonoBehaviour:
   ShotSpeedMultiplierEnemy: 1
   MovementSpeedMultiplierHero: 1
   MovementSpeedMultiplierEnemy: 1
-  EnemyMarchSpeed: 0.25
+  EnemyMarchSpeed: 0.025
+  EnemyDescendAmount: 0.5
   GameIsPaused: 0
   EnemyObjectSource: {fileID: 6122161258633207358, guid: 1b95f3e710020e24eb14c433bfe9c1b6,
     type: 3}
+  HeroShipTransformSource: {fileID: 0}
   GameParent: {fileID: 1731169628}
+  HeroShipTransform: {fileID: 0}
   GamefieldXMin: 0
   GamefieldXMax: 0
   GamefieldYMin: 0
@@ -211,6 +214,7 @@ MonoBehaviour:
   HorizontalRangeBorder: 5
   PaddingEnemyX: 3
   PaddingEnemyY: 4
+  EnemySpawnBegin: {x: -15, y: 5}
   LastPlacedEnemyX: 0
   LastPlacedEnemyY: 0
   EnemyColumns: 5
