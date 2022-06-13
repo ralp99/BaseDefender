@@ -64,7 +64,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Bullet.cs" />
+    <Compile Include="Assets\Scripts\CharacterObject.cs" />
+    <Compile Include="Assets\Scripts\CharacterSettings.cs" />
     <Compile Include="Assets\Scripts\connector.cs" />
+    <Compile Include="Assets\Scripts\ControllerManager.cs" />
+    <Compile Include="Assets\Scripts\Health.cs" />
     <Compile Include="Assets\Scripts\RAGameManager.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/Work/HCG/BaseDefender/ST/BaseDefender/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
