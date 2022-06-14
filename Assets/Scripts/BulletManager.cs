@@ -21,6 +21,7 @@ public class BulletManager : MonoBehaviour
         for (int i = 0; i < rAGameManager.HeroBulletPoolActive.Count; i++)
         {
             Transform currentBulletTransform = rAGameManager.HeroBulletPoolActive[i].transform;
+
             // move all bullets hero amount
         }
 
@@ -31,5 +32,9 @@ public class BulletManager : MonoBehaviour
 
         }
     }
+
+
+
+
 
 }

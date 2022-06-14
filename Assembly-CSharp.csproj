@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Bullet.cs" />
+    <Compile Include="Assets\Scripts\BulletManager.cs" />
     <Compile Include="Assets\Scripts\CharacterObject.cs" />
     <Compile Include="Assets\Scripts\CharacterSettings.cs" />
     <Compile Include="Assets\Scripts\connector.cs" />
@@ -72,6 +73,8 @@
     <Compile Include="Assets\Scripts\EnemyMarchingController.cs" />
     <Compile Include="Assets\Scripts\Health.cs" />
     <Compile Include="Assets\Scripts\HeroShipController.cs" />
+    <Compile Include="Assets\Scripts\PoolListMembership.cs" />
+    <Compile Include="Assets\Scripts\PoolManager.cs" />
     <Compile Include="Assets\Scripts\RAGameManager.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/Work/HCG/BaseDefender/ST/BaseDefender/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>

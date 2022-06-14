@@ -22,9 +22,8 @@ public class EnemyMarchingController : MonoBehaviour
     private float furthestEnemyPosDown;
     private bool enemiesMarchLeft = true;
 
-
-
     RAGameManager rAGameManager;
+
     void Start()
     {
         rAGameManager = RAGameManager.Instance;
@@ -35,18 +34,23 @@ public class EnemyMarchingController : MonoBehaviour
         currentEnemyMarchSpeed = rAGameManager.EnemyMarchSpeed;
 
         enemySpawnBegin = rAGameManager.EnemySpawnBegin;
-
     }
 
 
-    public void SpawnEnemySet()
+    public IEnumerator SpawnEnemySet()
     {
+
+        while (!rAGameManager)
+        {
+            yield return null;
+        }
+
         for (int i = 0; i < enemyColumns; i++)
         {
             lastPlacedEnemyX = enemySpawnBegin.x - paddingEnemyX;
             if (i == 0)
             {
-                   newYpos = enemySpawnBegin.y;
+                newYpos = enemySpawnBegin.y;
             }
 
             for (int j = 0; j < enemyRows; j++)
@@ -58,6 +62,8 @@ public class EnemyMarchingController : MonoBehaviour
 
         PerformAllEnemyPosChecks(false);
 
+        rAGameManager = RAGameManager.Instance;
+
         // define borders
         rAGameManager.GamefieldXMax = furthestEnemyPosRight + rAGameManager.HorizontalRangeBorder;
         rAGameManager.GamefieldXMin = furthestEnemyPosLeft - rAGameManager.HorizontalRangeBorder;
@@ -65,23 +71,11 @@ public class EnemyMarchingController : MonoBehaviour
 
     void SpawnEnemy()
     {
-        CharacterObject currentEnemy = null;
-        if (rAGameManager.EnemyPoolDead.Count < 0)
-        {
-            currentEnemy = rAGameManager.EnemyPoolDead[0];
-            currentEnemy.CharacterActivate();
-        }
-        else
-        {
-            GameObject newEnemyObject = null;
-            newEnemyObject = Instantiate(rAGameManager.EnemyObjectSource) as GameObject;
-            currentEnemy = newEnemyObject.GetComponent<CharacterObject>();
-        }
+        GameObject newEnemy = 
+        rAGameManager.poolManager.SpawnEntity(rAGameManager.EnemyObjectSource) as GameObject;
 
-        rAGameManager.ChangePoolMemberShipEnemyCharacter(currentEnemy, true);
+        Transform enemyTransform = newEnemy.GetComponent<Transform>();
 
-        // assign init characterPosition
-        Transform enemyTransform = currentEnemy.GetComponent<Transform>();
         enemyTransform.SetParent(rAGameManager.GameParent);
         float newXpos = lastPlacedEnemyX + paddingEnemyX;
 
@@ -90,6 +84,10 @@ public class EnemyMarchingController : MonoBehaviour
 
         enemyTransform.localPosition = new Vector3(newXpos, newYpos, 0);
     }
+
+
+
+
 
     void EnemyPositionCheck(Transform enemyPos)
     {
@@ -115,6 +113,11 @@ public class EnemyMarchingController : MonoBehaviour
     // called from gameLoop
     public void PerformAllEnemyPosChecks(bool doMarchEnemy)
     {
+        if (!rAGameManager)
+        {
+            return;
+        }
+
         shouldDescend = false;
 
         for (int i = 0; i < rAGameManager.EnemyPoolActive.Count; i++)

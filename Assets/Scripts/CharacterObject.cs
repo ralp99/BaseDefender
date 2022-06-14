@@ -25,7 +25,8 @@ public class CharacterObject : MonoBehaviour
 
     void CharacterDead()
     {
-        rAGameManager.ChangePoolMemberShipEnemyCharacter(this, false);
+    //    rAGameManager.ChangePoolMemberShipEnemyCharacter(this, false);
+
     }
 
 

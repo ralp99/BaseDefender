@@ -8,6 +8,9 @@ public class RAGameManager : MonoBehaviour
 
     public static RAGameManager Instance;
     private EnemyMarchingController enemyMarchingController;
+    private BulletManager bulletManager;
+    [HideInInspector]
+    public PoolManager poolManager;
 
     public enum CharacterType { Hero, StandardEnemy, BonusShip}
 
@@ -63,12 +66,12 @@ public class RAGameManager : MonoBehaviour
 
     // pools
     [Space]
-    public List<CharacterObject> EnemyPoolActive = new List<CharacterObject>();
-    public List<CharacterObject> EnemyPoolDead = new List<CharacterObject>();
-    public List<Bullet> EnemyBulletPoolActive = new List<Bullet>();
-    public List<Bullet> EnemyBulletPoolDead = new List<Bullet>();
-    public List<Bullet> HeroBulletPoolActive = new List<Bullet>();
-    public List<Bullet> HeroBulletPoolDead = new List<Bullet>();
+    public List<GameObject> EnemyPoolActive = new List<GameObject>();
+    public List<GameObject> EnemyPoolDead = new List<GameObject>();
+    public List<GameObject> EnemyBulletPoolActive = new List<GameObject>();
+    public List<GameObject> EnemyBulletPoolDead = new List<GameObject>();
+    public List<GameObject> HeroBulletPoolActive = new List<GameObject>();
+    public List<GameObject> HeroBulletPoolDead = new List<GameObject>();
 
 
     /// <summary>
@@ -76,71 +79,7 @@ public class RAGameManager : MonoBehaviour
     /// 5 rows x 11 columns
     /// </summary>
 
-
-
-    public void ChangePoolMemberShipEnemyCharacter(CharacterObject thisCharacter, bool addToList)
-    {
-        ChangePoolMembership(EnemyPoolActive, EnemyPoolDead, thisCharacter, addToList);
-    }
-
-    public void ChangePoolMemberShipEnemyBullet(Bullet thisCharacter, bool addToList)
-    {
-        ChangePoolMembership(EnemyBulletPoolActive, EnemyBulletPoolActive, thisCharacter, addToList);
-    }
-
-    void ChangePoolMembership(List<CharacterObject> characterListActive, List<CharacterObject> characterListDead, CharacterObject thisCharacter, bool AddToList)
-    {
-        if (AddToList)
-        {
-            if (!characterListActive.Contains(thisCharacter))
-            {
-                characterListActive.Add(thisCharacter);
-            }
-
-            if (characterListDead.Contains(thisCharacter))
-            {
-                characterListDead.Remove(thisCharacter);
-            }
-
-        }
-        else
-        {
-            // do I need to find index and RemoveAt instead?
-            if (characterListActive.Contains(thisCharacter))
-            {
-                characterListActive.Remove(thisCharacter);
-            }
-
-            if (!characterListDead.Contains(thisCharacter))
-            {
-                characterListDead.Add(thisCharacter);
-            }
-        }
-    }
-
-    void ChangePoolMembership(List<Bullet> characterListActive, List<Bullet> characterListDead, Bullet thisCharacter, bool AddToList)
-    {
-        if (AddToList)
-        {
-            if (!characterListActive.Contains(thisCharacter))
-            {
-                characterListActive.Add(thisCharacter);
-            }
-        }
-        else
-        {
-            // do I need to find index and RemoveAt instead?
-            if (characterListActive.Contains(thisCharacter))
-            {
-                characterListActive.Remove(thisCharacter);
-            }
-        }
-    }
-
    
-
-
-
     void GameLoop()
     {
         if (GameIsPaused)
@@ -148,9 +87,8 @@ public class RAGameManager : MonoBehaviour
             return;
         }
         enemyMarchingController.PerformAllEnemyPosChecks(true);
+        bulletManager.MoveAllBullets();
     }
-
-
 
 
     private void Awake()
@@ -162,9 +100,13 @@ public class RAGameManager : MonoBehaviour
     void Start()
     {
         enemyMarchingController = GetComponent<EnemyMarchingController>();
-        enemyMarchingController.SpawnEnemySet();
+        bulletManager = GetComponent<BulletManager>();
+        poolManager = GetComponent<PoolManager>();
+
+        StartCoroutine(enemyMarchingController.SpawnEnemySet());
         CreateHeroShipTransform();
     }
+
 
     private void Update()
     {
@@ -199,7 +141,5 @@ public class RAGameManager : MonoBehaviour
     {
         GameIsPaused = !GameIsPaused;
     }
-
-
 
 }

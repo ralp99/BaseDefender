@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 1840074061929117471}
   - component: {fileID: 1185205920681336044}
   m_Layer: 0
-  m_Name: heroBullet
+  m_Name: enemyBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -135,5 +135,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 116462e1f59f73b4a85fcff47b58ee2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  usingList: 2
+  usingList: 1
   performListMembership: 3

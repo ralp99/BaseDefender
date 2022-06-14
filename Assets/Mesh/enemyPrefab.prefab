@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6063841577528559499}
   - component: {fileID: 8305462493576167988}
   - component: {fileID: 1840074061929117471}
+  - component: {fileID: 5814788132761209509}
   m_Layer: 0
   m_Name: enemyPrefab
   m_TagString: Untagged
@@ -122,3 +123,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CurrentHealth: 0
   MaxHealth: 1
+--- !u!114 &5814788132761209509
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6122161258633207358}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 116462e1f59f73b4a85fcff47b58ee2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  usingList: 3
+  performListMembership: 3
