@@ -5,7 +5,6 @@ using UnityEngine;
 public class PoolManager : MonoBehaviour
 {
     public enum UsingList { ExplosionsEnemy, BulletsEnemy, BulletsHero, EnemyA, EnemyB, Bonus }
-    public enum PerformListMembership { None, OnDisable, OnEnable, Both }
     RAGameManager rAGameManager;
 
     void Start()
@@ -18,7 +17,7 @@ public class PoolManager : MonoBehaviour
     {
         GameObject newObject = null;
 
-        PoolListMembership.UsingList usingList = spawnObject.GetComponent<PoolListMembership>().usingList;
+        UsingList usingList = spawnObject.GetComponent<PoolListMembership>().usingList;
         List<GameObject> inactiveList = UsingInactiveList(usingList, false);
 
 
@@ -35,7 +34,6 @@ public class PoolManager : MonoBehaviour
                     if (inactiveList[i] != null)
                     {
                         if (spawnObject.name == inactiveList[i].name)
-
                         {
                             newObject = inactiveList[i];
                             break;
@@ -47,13 +45,15 @@ public class PoolManager : MonoBehaviour
 
         if (!newObject)
         {
-            newObject = Instantiate(rAGameManager.EnemyObjectSource) as GameObject;
+            newObject = Instantiate(spawnObject) as GameObject;
+            newObject.name = spawnObject.name;
         }
 
+        newObject.SetActive(true);
         return newObject;
     }
 
-    public List <GameObject> UsingInactiveList(PoolListMembership.UsingList usingList, bool activeList)
+    public List <GameObject> UsingInactiveList(UsingList usingList, bool activeList)
     {
         List<GameObject> returnListActive = null;
         List<GameObject> returnListDead = null;
@@ -61,23 +61,23 @@ public class PoolManager : MonoBehaviour
 
         switch (usingList)
         {
-            case PoolListMembership.UsingList.ExplosionsEnemy:
+            case UsingList.ExplosionsEnemy:
                 break;
-            case PoolListMembership.UsingList.BulletsEnemy:
+            case UsingList.BulletsEnemy:
                 returnListActive = rAGameManager.EnemyBulletPoolActive;
                 returnListDead = rAGameManager.EnemyBulletPoolDead;
                 break;
-            case PoolListMembership.UsingList.BulletsHero:
+            case UsingList.BulletsHero:
                 returnListActive = rAGameManager.HeroBulletPoolActive;
                 returnListDead = rAGameManager.HeroBulletPoolDead;
                 break;
-            case PoolListMembership.UsingList.EnemyA:
+            case UsingList.EnemyA:
                 returnListActive = rAGameManager.EnemyPoolActive;
                 returnListDead = rAGameManager.EnemyPoolDead;
                 break;
-            case PoolListMembership.UsingList.EnemyB:
+            case UsingList.EnemyB:
                 break;
-            case PoolListMembership.UsingList.Bonus:
+            case UsingList.Bonus:
                 break;
             default:
                 break;

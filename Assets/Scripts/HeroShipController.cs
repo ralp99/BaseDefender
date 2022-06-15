@@ -7,6 +7,7 @@ public class HeroShipController : MonoBehaviour
 {
     RAGameManager rAGameManager;
     Transform HeroShipTransform;
+    CharacterObject HeroShipCharacter;
 
     public UnityAction OnPlayerJoyleft;
   
@@ -49,6 +50,7 @@ public class HeroShipController : MonoBehaviour
     {
         rAGameManager = RAGameManager.Instance;
         HeroShipTransform = rAGameManager.HeroShipTransform;
+        HeroShipCharacter = HeroShipTransform.GetComponent<CharacterObject>();
     }
 
 
@@ -86,7 +88,10 @@ public class HeroShipController : MonoBehaviour
             return;
         }
 
-        print("pow");
+        if (rAGameManager.HeroBulletPoolActive.Count < rAGameManager.HeroShotLimit)
+        {
+            rAGameManager.bulletManager.SpawnBullet(HeroShipCharacter);
+        }
     }
 
     void TogglePause()

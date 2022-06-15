@@ -67,6 +67,10 @@ public class EnemyMarchingController : MonoBehaviour
         // define borders
         rAGameManager.GamefieldXMax = furthestEnemyPosRight + rAGameManager.HorizontalRangeBorder;
         rAGameManager.GamefieldXMin = furthestEnemyPosLeft - rAGameManager.HorizontalRangeBorder;
+        rAGameManager.GamefieldYMax = rAGameManager.EnemyPoolActive[rAGameManager.EnemyPoolActive.Count-1].GetComponent<Transform>().localPosition.y +
+            rAGameManager.CeilingBorder;
+
+        rAGameManager.bulletManager.DefineBounds();
     }
 
     void SpawnEnemy()

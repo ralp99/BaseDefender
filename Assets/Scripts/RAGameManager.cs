@@ -8,7 +8,8 @@ public class RAGameManager : MonoBehaviour
 
     public static RAGameManager Instance;
     private EnemyMarchingController enemyMarchingController;
-    private BulletManager bulletManager;
+    [HideInInspector]
+    public BulletManager bulletManager;
     [HideInInspector]
     public PoolManager poolManager;
 
@@ -37,6 +38,8 @@ public class RAGameManager : MonoBehaviour
     // sources
     public GameObject EnemyObjectSource;
     public GameObject HeroShipTransformSource;
+    public GameObject HeroBulletSource;
+    public GameObject EnemyBulletSource;
 
     //ingame entities
     public Transform GameParent;
@@ -48,6 +51,9 @@ public class RAGameManager : MonoBehaviour
     public float GamefieldYMax;
 
     public float HorizontalRangeBorder = 5.0f;
+    public float CeilingBorder = 5.0f;
+    public float FloorBorder = 5.0f;
+    public int HeroShotLimit = 1;
 
     [Space]
     public float PaddingEnemyX;

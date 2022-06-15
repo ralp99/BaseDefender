@@ -198,9 +198,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53592ad3572369248a3b771b3a07ff2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bulletManager: {fileID: 0}
+  poolManager: {fileID: 0}
   FireButtonPressed: 0
-  ShotSpeedMultiplierHero: 1
-  ShotSpeedMultiplierEnemy: 1
+  ShotSpeedMultiplierHero: 0.2
+  ShotSpeedMultiplierEnemy: 0.2
   MovementSpeedMultiplierHero: 1
   MovementSpeedMultiplierEnemy: 1
   EnemyMarchSpeed: 0.025
@@ -211,6 +213,10 @@ MonoBehaviour:
     type: 3}
   HeroShipTransformSource: {fileID: 6122161258633207358, guid: 090f5c9c8811ea64ca3769c4263c51bc,
     type: 3}
+  HeroBulletSource: {fileID: 6122161258633207358, guid: 9d9eac7d25228ee46a5299840ea9b2b6,
+    type: 3}
+  EnemyBulletSource: {fileID: 6122161258633207358, guid: 30ec6cb248084ec499bc3d9cb10966aa,
+    type: 3}
   GameParent: {fileID: 1731169628}
   HeroShipTransform: {fileID: 0}
   GamefieldXMin: 0
@@ -218,6 +224,9 @@ MonoBehaviour:
   GamefieldYMin: 0
   GamefieldYMax: 0
   HorizontalRangeBorder: 5
+  CeilingBorder: 5
+  FloorBorder: 5
+  HeroShotLimit: 1
   PaddingEnemyX: 3
   PaddingEnemyY: 4
   EnemySpawnBegin: {x: -15, y: 20}

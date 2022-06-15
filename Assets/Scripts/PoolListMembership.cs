@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class PoolListMembership : MonoBehaviour
 {
+    public enum PerformListMembership { None, OnDisable, OnEnable, Both }
 
-    public enum UsingList {ExplosionsEnemy, BulletsEnemy, BulletsHero, EnemyA, EnemyB, Bonus}
-    public enum PerformListMembership {None, OnDisable, OnEnable, Both}
-    public UsingList usingList;
+    public PoolManager.UsingList usingList;
     public PerformListMembership performListMembership;
 
     RAGameManager rAGameManager;
@@ -59,14 +58,14 @@ public class PoolListMembership : MonoBehaviour
 
         if (performListMembership == PerformListMembership.OnDisable || performListMembership == PerformListMembership.Both)
         {
-            if (inactiveList.Contains(gameObject))
+            if (!inactiveList.Contains(gameObject))
             {
-                inactiveList.Remove(gameObject);
+                inactiveList.Add(gameObject);
             }
 
-            if (!activeList.Contains(gameObject))
+            if (activeList.Contains(gameObject))
             {
-                activeList.Add(gameObject);
+                activeList.Remove(gameObject);
             }
         }
 
