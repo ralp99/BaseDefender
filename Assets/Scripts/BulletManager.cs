@@ -5,6 +5,7 @@ using UnityEngine;
 public class BulletManager : MonoBehaviour
 {
     public enum BulletType { HeroStandard, EnemyStandard, Override }
+    public enum Vulnerability { ToHero, ToEnemy, ToAll, ToNone }
     public enum BulletDirection { NA, Forward, Backward, Left, Right, Above, Below }
     public enum BulletSpeed { ByType, Override}
 
@@ -50,7 +51,8 @@ public class BulletManager : MonoBehaviour
         }
         else
         {
-            bulletTransform.localPosition = spawningCharacter.GetComponent<Transform>().localPosition;
+            // CRASH HERE AFTER ROUND CLEAR
+            bulletTransform.localPosition = spawningCharacter.GetComponent<Transform>().localPosition;  
         }
 
     }

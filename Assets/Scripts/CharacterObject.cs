@@ -15,6 +15,7 @@ public class CharacterObject : MonoBehaviour
     public Transform BulletSpawnPoint;
 
     public Health MyHealth;
+    public int PointValue;
 
     void Start()
     {

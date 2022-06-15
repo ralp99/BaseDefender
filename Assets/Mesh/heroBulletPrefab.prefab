@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 7480902097313431160}
   - component: {fileID: 8927617574852351992}
   - component: {fileID: 6063841577528559499}
-  - component: {fileID: 1840074061929117471}
   - component: {fileID: 1185205920681336044}
   - component: {fileID: 943255655010514531}
   m_Layer: 0
@@ -95,20 +94,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1840074061929117471
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6122161258633207358}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b28ab8f7a3a26b408691c0535400d2a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CurrentHealth: 0
-  MaxHealth: 1
 --- !u!114 &1185205920681336044
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -140,3 +125,5 @@ MonoBehaviour:
   MyBulletSpeed: 0
   OverrideSpeed: 0
   MyUsingSpeed: 0
+  DestroyIfOutOfBounds: 1
+  DealDamage: 1

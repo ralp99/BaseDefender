@@ -66,6 +66,7 @@ public class RAGameManager : MonoBehaviour
 
     // stats
     [Space]
+    public int LivesStart = 3;
     public int LivesRemaining;
     public int CurrentScore;
     public int HiScore;
@@ -79,6 +80,7 @@ public class RAGameManager : MonoBehaviour
     public List<GameObject> HeroBulletPoolActive = new List<GameObject>();
     public List<GameObject> HeroBulletPoolDead = new List<GameObject>();
 
+    bool CanRunGameLoop = false;
 
     /// <summary>
     /// notes
@@ -88,12 +90,74 @@ public class RAGameManager : MonoBehaviour
    
     void GameLoop()
     {
-        if (GameIsPaused)
+     if (!CanRunGameLoop)
         {
             return;
         }
+
         enemyMarchingController.PerformAllEnemyPosChecks(true);
         bulletManager.MoveAllBullets();
+        CheckForLivesEnd();
+        CheckForRoundEnd();
+    }
+
+
+    public void UnlockGameLoop()
+    {
+        CanRunGameLoop = true;
+        bulletManager.DefineBounds();
+    }
+
+    void CheckForRoundEnd()
+    {
+        if (EnemyPoolActive.Count == 0)
+        {
+            BeginRound();
+        }
+    }
+
+    void CheckForLivesEnd()
+    {
+        if (LivesRemaining == 0)
+        {
+            GameOver();
+        }
+    }
+
+    void GameOver()
+    {
+        CanRunGameLoop = false;
+        ClearEntities();
+
+    }
+
+    void ClearEntities()
+    {
+        for (int i = 0; i < EnemyBulletPoolActive.Count; i++)
+        {
+            EnemyBulletPoolActive[i].SetActive(false);
+        }
+
+        for (int i = 0; i < HeroBulletPoolActive.Count; i++)
+        {
+            HeroBulletPoolActive[i].SetActive(false);
+        }
+
+        for (int i = 0; i < EnemyPoolActive.Count; i++)
+        {
+            EnemyPoolActive[i].SetActive(false);
+        }
+
+        DestroyHeroTransform();
+
+    }
+
+    void DestroyHeroTransform()
+    {
+        if (HeroShipTransform)
+        {
+            Destroy(HeroShipTransform.gameObject);
+        }
     }
 
 
@@ -109,9 +173,25 @@ public class RAGameManager : MonoBehaviour
         bulletManager = GetComponent<BulletManager>();
         poolManager = GetComponent<PoolManager>();
 
+        // this should be launched by a button press
+        RestartGame();
+    }
+
+    public void RestartGame()
+    {
+        LivesRemaining = LivesStart;
+        CurrentScore = 0;
+        BeginRound();
+    }
+
+
+
+    void BeginRound()
+    {
         StartCoroutine(enemyMarchingController.SpawnEnemySet());
         CreateHeroShipTransform();
     }
+
 
 
     private void Update()
@@ -133,15 +213,21 @@ public class RAGameManager : MonoBehaviour
 
     void CreateHeroShipTransform()
     {
-
+        DestroyHeroTransform();
         GameObject newHeroObject = null;
         newHeroObject = Instantiate(HeroShipTransformSource) as GameObject;
-        //  currentEnemy = newEnemyObject.GetComponent<CharacterObject>();
         HeroShipTransform = newHeroObject.transform;
         HeroShipTransform.SetParent(GameParent);
-
     }
 
+    public void AddToScore(int addValue)
+    {
+        CurrentScore += addValue;
+        if (HiScore < CurrentScore)
+        {
+            HiScore = CurrentScore;
+        }
+    }
 
     public void ChangePauseState()
     {

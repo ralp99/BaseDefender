@@ -70,7 +70,8 @@ public class EnemyMarchingController : MonoBehaviour
         rAGameManager.GamefieldYMax = rAGameManager.EnemyPoolActive[rAGameManager.EnemyPoolActive.Count-1].GetComponent<Transform>().localPosition.y +
             rAGameManager.CeilingBorder;
 
-        rAGameManager.bulletManager.DefineBounds();
+        rAGameManager.UnlockGameLoop();
+
     }
 
     void SpawnEnemy()

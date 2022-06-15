@@ -12,6 +12,7 @@ public class Projectile : MonoBehaviour
     [HideInInspector]
     public float MyUsingSpeed = 0.0f;
     public bool DestroyIfOutOfBounds = true;
+    public int DealDamage = 1;
 
     RAGameManager rAGameManager;
 
