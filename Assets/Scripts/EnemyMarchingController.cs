@@ -11,6 +11,8 @@ public class EnemyMarchingController : MonoBehaviour
     private float lastPlacedEnemyY;
     private float paddingEnemyX;
     private float paddingEnemyY;
+    public float enemyShotDelay;
+    public float enemyShotJitter;
 
     private float currentEnemyMarchSpeed = 0;
 
@@ -24,6 +26,9 @@ public class EnemyMarchingController : MonoBehaviour
 
     public Dictionary<GameObject, SoInvaderColumn> Ass_Enemy_ColumnSO = new Dictionary<GameObject, SoInvaderColumn>();
 
+    public List<GameObject> BottomRowEnemies = new List<GameObject>();
+    public IEnumerator EnemyShotTimerCached;
+
     RAGameManager rAGameManager;
 
     void Start()
@@ -33,6 +38,8 @@ public class EnemyMarchingController : MonoBehaviour
         enemyRows = rAGameManager.EnemyRows;
         paddingEnemyX = rAGameManager.PaddingEnemyX;
         paddingEnemyY = rAGameManager.PaddingEnemyY;
+        enemyShotDelay = rAGameManager.EnemyShotDelay;
+        enemyShotJitter = rAGameManager.EnemyShotJitter;
         currentEnemyMarchSpeed = rAGameManager.EnemyMarchSpeed;
 
         enemySpawnBegin = rAGameManager.EnemySpawnBegin;
@@ -47,7 +54,16 @@ public class EnemyMarchingController : MonoBehaviour
             yield return null;
         }
 
+        Ass_Enemy_ColumnSO.Clear();
+
         for (int i = 0; i < enemyColumns; i++)
+        {
+            SoInvaderColumn newColumn = Instantiate(rAGameManager.EnemyColumnSOs) as SoInvaderColumn;
+            rAGameManager.InvaderColumns.Add(newColumn);
+        }
+
+
+        for (int i = 0; i < enemyRows; i++)
         {
             lastPlacedEnemyX = enemySpawnBegin.x - paddingEnemyX;
             if (i == 0)
@@ -55,13 +71,9 @@ public class EnemyMarchingController : MonoBehaviour
                 newYpos = enemySpawnBegin.y;
             }
 
-            SoInvaderColumn newColumn = Instantiate(rAGameManager.EnemyColumnSOs) as SoInvaderColumn;
-            rAGameManager.InvaderColumns.Add(newColumn);
-
-
-            for (int j = 0; j < enemyRows; j++)
+            for (int j = 0; j < enemyColumns; j++)
             {
-                SpawnEnemy(newColumn);
+                SpawnEnemy(j);
             }
             newYpos += paddingEnemyY;
         }
@@ -76,14 +88,29 @@ public class EnemyMarchingController : MonoBehaviour
         rAGameManager.GamefieldYMax = rAGameManager.EnemyPoolActive[rAGameManager.EnemyPoolActive.Count-1].GetComponent<Transform>().localPosition.y +
             rAGameManager.CeilingBorder;
 
+        EvaluateBottomRowEnemies();
         rAGameManager.UnlockGameLoop();
-
+        EnemyShotTimerCached = EnemyShotTimer();
+        StartCoroutine(EnemyShotTimerCached);
     }
 
-    void SpawnEnemy(SoInvaderColumn currentColumn)
+
+    public void KillShotCache()
+    {
+        if (EnemyShotTimerCached != null)
+        {
+            StopCoroutine(EnemyShotTimerCached);
+            EnemyShotTimerCached = null;
+        }
+    }
+
+
+    void SpawnEnemy(int addToEnemyColumn)
     {
         GameObject newEnemy = 
         rAGameManager.poolManager.SpawnEntity(rAGameManager.EnemyObjectSource) as GameObject;
+
+        SoInvaderColumn currentColumn = rAGameManager.InvaderColumns[addToEnemyColumn];
         currentColumn.EnemyColumn.Add(newEnemy);
         Ass_Enemy_ColumnSO.Add(newEnemy, currentColumn);
 
@@ -189,6 +216,40 @@ public class EnemyMarchingController : MonoBehaviour
 
     }
 
+    public void EvaluateBottomRowEnemies()
+    {
+        BottomRowEnemies.Clear();
+        for (int i = 0; i < rAGameManager.InvaderColumns.Count; i++)
+        {
+            SoInvaderColumn currentColumn = rAGameManager.InvaderColumns[i];
 
+            //  if (currentColumn.EnemyColumn != null)
+              if (currentColumn.EnemyColumn.Count > 0)
+            {
+                GameObject currentEnemy = currentColumn.EnemyColumn[0];
+                BottomRowEnemies.Add(currentEnemy);
+            }
+        }
+    }
+
+    public IEnumerator EnemyShotTimer()
+    {
+        float delay = Random.Range(0, enemyShotJitter) + enemyShotDelay;
+        yield return new WaitForSeconds(delay);
+
+        int randomShooterID = Random.Range(0, BottomRowEnemies.Count);
+        GameObject currentEnemyShooter = BottomRowEnemies[randomShooterID];
+        EnemyFireProjectile(currentEnemyShooter);
+        EnemyShotTimerCached = EnemyShotTimer();
+        StartCoroutine(EnemyShotTimerCached);
+    }
+
+    void EnemyFireProjectile(GameObject currentEnemy)
+    {
+        if (rAGameManager.EnemyBulletPoolActive.Count < rAGameManager.EnemyShotLimit)
+        {
+            rAGameManager.bulletManager.SpawnBullet(currentEnemy.GetComponent<CharacterObject>());
+        }
+    }
 
 }

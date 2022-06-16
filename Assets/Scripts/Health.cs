@@ -36,6 +36,7 @@ public class Health : MonoBehaviour
             // get list val in index
             rAGameManager.enemyMarchingController.Ass_Enemy_ColumnSO[gameObject].EnemyColumn.Remove(gameObject);
         }
+        characterObject.CharacterDead();
     }
 
     public void RestartCharacter()
@@ -45,6 +46,13 @@ public class Health : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+
+
+        if (!rAGameManager.GameplayAvailable)
+        {
+            return;
+        }
+
         CollisionInteraction(collision.gameObject);
     }
 
@@ -58,14 +66,19 @@ public class Health : MonoBehaviour
         }
         */
 
+
+
+
         Projectile hittingProjectile = col.gameObject.GetComponent<Projectile>();
 
-        if (BulletVulnerability == BulletManager.Vulnerability.ToHero && hittingProjectile.MyBulletType == BulletManager.BulletType.HeroStandard)
+        if (BulletVulnerability == BulletManager.Vulnerability.ToHero && 
+            hittingProjectile.MyBulletType == BulletManager.BulletType.HeroStandard)
         {
             HitHappens(col);
         }
 
-        if (BulletVulnerability == BulletManager.Vulnerability.ToEnemy && hittingProjectile.MyBulletType == BulletManager.BulletType.EnemyStandard)
+        if (BulletVulnerability == BulletManager.Vulnerability.ToEnemy &&
+            hittingProjectile.MyBulletType == BulletManager.BulletType.EnemyStandard)
         {
             HitHappens(col);
         }

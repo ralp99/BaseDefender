@@ -108,8 +108,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9364dec8ee31704ba4234be2b445803, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CharacterType: 0
-  MyBulletType: 0
+  CharacterType: 1
+  MyBulletType: 1
   MyBulletSpawnSourceOverride: {fileID: 0}
   MyBulletSpawnSource: {fileID: 0}
   BulletSpawnPoint: {fileID: 0}

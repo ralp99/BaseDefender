@@ -13,6 +13,10 @@ public class RAGameManager : MonoBehaviour
     public BulletManager bulletManager;
     [HideInInspector]
     public PoolManager poolManager;
+    [HideInInspector]
+    public UIController uIController;
+    [HideInInspector]
+    HeroShipController heroShipController;
 
     public enum CharacterType { Hero, StandardEnemy, BonusShip}
 
@@ -35,6 +39,8 @@ public class RAGameManager : MonoBehaviour
     ///
 
     public bool GameIsPaused;
+    public bool GameplayAvailable;
+    public bool GameIsOver;
 
     // sources
     public GameObject EnemyObjectSource;
@@ -56,6 +62,9 @@ public class RAGameManager : MonoBehaviour
     public float CeilingBorder = 5.0f;
     public float FloorBorder = 5.0f;
     public int HeroShotLimit = 1;
+    public int EnemyShotLimit = 2;
+    public float EnemyShotDelay = 1.0f;
+    public float EnemyShotJitter = 0.13f;
 
     [Space]
     public float PaddingEnemyX;
@@ -84,7 +93,7 @@ public class RAGameManager : MonoBehaviour
 
     public List<SoInvaderColumn> InvaderColumns = new List<SoInvaderColumn>();
 
-    bool CanRunGameLoop = false;
+    public bool CanRunGameLoop = false;
 
     /// <summary>
     /// notes
@@ -94,6 +103,7 @@ public class RAGameManager : MonoBehaviour
    
     void GameLoop()
     {
+
      if (!CanRunGameLoop)
         {
             return;
@@ -114,6 +124,11 @@ public class RAGameManager : MonoBehaviour
 
     void CheckForRoundEnd()
     {
+        if (!CanRunGameLoop)
+        {
+            return;
+        }
+
         if (EnemyPoolActive.Count == 0)
         {
             BeginRound();
@@ -131,25 +146,33 @@ public class RAGameManager : MonoBehaviour
     void GameOver()
     {
         CanRunGameLoop = false;
+        enemyMarchingController.KillShotCache();
         ClearEntities();
-
+        uIController.UIVisibility(true);
     }
 
     void ClearEntities()
     {
+        List<GameObject> clearObjectsList = new List<GameObject>();
+
+        for (int i = 0; i < EnemyPoolActive.Count; i++)
+        {
+            clearObjectsList.Add(EnemyPoolActive[i]);
+        }
+
         for (int i = 0; i < EnemyBulletPoolActive.Count; i++)
         {
-            EnemyBulletPoolActive[i].SetActive(false);
+            clearObjectsList.Add(EnemyBulletPoolActive[i]);
         }
 
         for (int i = 0; i < HeroBulletPoolActive.Count; i++)
         {
-            HeroBulletPoolActive[i].SetActive(false);
+            clearObjectsList.Add(HeroBulletPoolActive[i]);
         }
 
-        for (int i = 0; i < EnemyPoolActive.Count; i++)
+        for (int i = 0; i < clearObjectsList.Count; i++)
         {
-            EnemyPoolActive[i].SetActive(false);
+            clearObjectsList[i].SetActive(false);
         }
 
         DestroyHeroTransform();
@@ -161,6 +184,20 @@ public class RAGameManager : MonoBehaviour
         if (HeroShipTransform)
         {
             Destroy(HeroShipTransform.gameObject);
+        }
+    }
+
+    public void HeroKilled()
+    {
+        // see if game over, or if next round
+        if (LivesRemaining > 0)
+        {
+            LivesRemaining--;
+            CreateHeroShipTransform();
+        }
+        else
+        {
+            GameOver();
         }
     }
 
@@ -176,9 +213,12 @@ public class RAGameManager : MonoBehaviour
         enemyMarchingController = GetComponent<EnemyMarchingController>();
         bulletManager = GetComponent<BulletManager>();
         poolManager = GetComponent<PoolManager>();
+        heroShipController = GetComponent<HeroShipController>();
+        uIController = GetComponent<UIController>();
+        uIController.UIVisibility(true);
 
         // this should be launched by a button press
-        RestartGame();
+        // RestartGame();
     }
 
     public void RestartGame()
@@ -186,6 +226,8 @@ public class RAGameManager : MonoBehaviour
         LivesRemaining = LivesStart;
         CurrentScore = 0;
         BeginRound();
+        heroShipController.HeroShipInit();
+        uIController.UIVisibility(false);
     }
 
 
@@ -206,7 +248,12 @@ public class RAGameManager : MonoBehaviour
             FireButtonAction();
         }
 
-        if (GameIsPaused)
+        //   GameplayAvailable = GameIsPaused || !CanRunGameLoop;
+
+        GameplayAvailable = !GameIsPaused || CanRunGameLoop;
+
+
+        if (!GameplayAvailable)
         {
             return;
         }
@@ -231,6 +278,8 @@ public class RAGameManager : MonoBehaviour
         {
             HiScore = CurrentScore;
         }
+
+        enemyMarchingController.EvaluateBottomRowEnemies();
     }
 
     public void ChangePauseState()

@@ -70,7 +70,7 @@ public class BulletManager : MonoBehaviour
 
         for (int i = 0; i < rAGameManager.EnemyBulletPoolActive.Count; i++)
         {
-            GameObject currentBullet = rAGameManager.HeroBulletPoolActive[i];
+            GameObject currentBullet = rAGameManager.EnemyBulletPoolActive[i];
             DictionaryChecks(currentBullet, AllBulletTransforms);
         }
 
@@ -146,12 +146,7 @@ public class BulletManager : MonoBehaviour
             {
                 currentBulletProjectile.gameObject.SetActive(false);
             }
-
         }
-
-
-
-
     }
 
     void DictionaryChecks(GameObject bulletGameObject, List<Transform> AllBulletTransforms)

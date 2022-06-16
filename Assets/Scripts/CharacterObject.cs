@@ -50,14 +50,12 @@ public class CharacterObject : MonoBehaviour
         MyHealth.RestartCharacter();
     }
 
-    void CharacterDead()
+    public void CharacterDead()
     {
-
+        if (CharacterType == RAGameManager.CharacterType.Hero)
+        {
+            rAGameManager.HeroKilled();
+        }
     }
 
-
-    void Update()
-    {
-        
-    }
 }

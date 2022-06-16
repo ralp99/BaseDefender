@@ -15,7 +15,7 @@ public class HeroShipController : MonoBehaviour
     void OnPlayerJoyMoveShip(bool moveLeft)
     {
 
-        if (rAGameManager.GameIsPaused)
+        if (rAGameManager.GameIsPaused || !rAGameManager.CanRunGameLoop)
         {
             return;
         }
@@ -49,6 +49,11 @@ public class HeroShipController : MonoBehaviour
     void Start()
     {
         rAGameManager = RAGameManager.Instance;
+        
+    }
+
+    public void HeroShipInit()
+    {
         HeroShipTransform = rAGameManager.HeroShipTransform;
         HeroShipCharacterCheck();
     }
@@ -68,7 +73,6 @@ public class HeroShipController : MonoBehaviour
         ControllerManager.OnRightThumbstick += MoveShipRight;
         ControllerManager.OnAbuttonPress += PlayerFireProjectile;
         ControllerManager.OnYbuttonPress += TogglePause;
-
     }
 
     private void OnDisable()
@@ -91,10 +95,12 @@ public class HeroShipController : MonoBehaviour
 
     void PlayerFireProjectile()
     {
-        if (rAGameManager.GameIsPaused)
+        if (!rAGameManager.GameplayAvailable)
         {
             return;
         }
+
+
 
         if (rAGameManager.HeroBulletPoolActive.Count < rAGameManager.HeroShotLimit)
         {

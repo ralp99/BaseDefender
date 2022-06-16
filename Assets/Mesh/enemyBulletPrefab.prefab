@@ -121,7 +121,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MyBulletDirection: 0
-  MyBulletType: 0
+  MyBulletType: 1
   MyBulletSpeed: 0
   OverrideSpeed: 0
   MyUsingSpeed: 0
