@@ -50,9 +50,17 @@ public class HeroShipController : MonoBehaviour
     {
         rAGameManager = RAGameManager.Instance;
         HeroShipTransform = rAGameManager.HeroShipTransform;
-        HeroShipCharacter = HeroShipTransform.GetComponent<CharacterObject>();
+        HeroShipCharacterCheck();
     }
 
+
+    void HeroShipCharacterCheck()
+    {
+        if (!HeroShipCharacter)
+        {
+            HeroShipCharacter = HeroShipTransform.GetComponent<CharacterObject>();
+        }
+    }
 
     private void OnEnable()
     {
@@ -90,6 +98,7 @@ public class HeroShipController : MonoBehaviour
 
         if (rAGameManager.HeroBulletPoolActive.Count < rAGameManager.HeroShotLimit)
         {
+            HeroShipCharacterCheck();
             rAGameManager.bulletManager.SpawnBullet(HeroShipCharacter);
         }
     }

@@ -217,6 +217,7 @@ MonoBehaviour:
     type: 3}
   EnemyBulletSource: {fileID: 6122161258633207358, guid: 30ec6cb248084ec499bc3d9cb10966aa,
     type: 3}
+  EnemyColumnSOs: {fileID: 11400000, guid: 5d00999c97bf6a34c86dee22e99a29dc, type: 2}
   GameParent: {fileID: 1731169628}
   HeroShipTransform: {fileID: 0}
   GamefieldXMin: 0
@@ -232,6 +233,7 @@ MonoBehaviour:
   EnemySpawnBegin: {x: -15, y: 20}
   EnemyColumns: 5
   EnemyRows: 11
+  LivesStart: 3
   LivesRemaining: 0
   CurrentScore: 0
   HiScore: 0

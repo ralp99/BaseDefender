@@ -31,6 +31,11 @@ public class Health : MonoBehaviour
     {
         gameObject.SetActive(false);
         rAGameManager.AddToScore(characterObject.PointValue);
+        if (rAGameManager.enemyMarchingController.Ass_Enemy_ColumnSO.ContainsKey(gameObject))
+        {
+            // get list val in index
+            rAGameManager.enemyMarchingController.Ass_Enemy_ColumnSO[gameObject].EnemyColumn.Remove(gameObject);
+        }
     }
 
     public void RestartCharacter()

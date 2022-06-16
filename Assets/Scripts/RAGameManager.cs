@@ -7,7 +7,8 @@ public class RAGameManager : MonoBehaviour
 {
 
     public static RAGameManager Instance;
-    private EnemyMarchingController enemyMarchingController;
+    [HideInInspector]
+    public EnemyMarchingController enemyMarchingController;
     [HideInInspector]
     public BulletManager bulletManager;
     [HideInInspector]
@@ -40,6 +41,7 @@ public class RAGameManager : MonoBehaviour
     public GameObject HeroShipTransformSource;
     public GameObject HeroBulletSource;
     public GameObject EnemyBulletSource;
+    public SoInvaderColumn EnemyColumnSOs;
 
     //ingame entities
     public Transform GameParent;
@@ -79,6 +81,8 @@ public class RAGameManager : MonoBehaviour
     public List<GameObject> EnemyBulletPoolDead = new List<GameObject>();
     public List<GameObject> HeroBulletPoolActive = new List<GameObject>();
     public List<GameObject> HeroBulletPoolDead = new List<GameObject>();
+
+    public List<SoInvaderColumn> InvaderColumns = new List<SoInvaderColumn>();
 
     bool CanRunGameLoop = false;
 

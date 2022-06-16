@@ -76,6 +76,7 @@
     <Compile Include="Assets\Scripts\PoolManager.cs" />
     <Compile Include="Assets\Scripts\Projectile.cs" />
     <Compile Include="Assets\Scripts\RAGameManager.cs" />
+    <Compile Include="Assets\Scripts\SoInvaderColumn.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/Work/HCG/BaseDefender/ST/BaseDefender/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>

@@ -22,6 +22,8 @@ public class EnemyMarchingController : MonoBehaviour
     private float furthestEnemyPosDown;
     private bool enemiesMarchLeft = true;
 
+    public Dictionary<GameObject, SoInvaderColumn> Ass_Enemy_ColumnSO = new Dictionary<GameObject, SoInvaderColumn>();
+
     RAGameManager rAGameManager;
 
     void Start()
@@ -53,9 +55,13 @@ public class EnemyMarchingController : MonoBehaviour
                 newYpos = enemySpawnBegin.y;
             }
 
+            SoInvaderColumn newColumn = Instantiate(rAGameManager.EnemyColumnSOs) as SoInvaderColumn;
+            rAGameManager.InvaderColumns.Add(newColumn);
+
+
             for (int j = 0; j < enemyRows; j++)
             {
-                SpawnEnemy();
+                SpawnEnemy(newColumn);
             }
             newYpos += paddingEnemyY;
         }
@@ -74,10 +80,12 @@ public class EnemyMarchingController : MonoBehaviour
 
     }
 
-    void SpawnEnemy()
+    void SpawnEnemy(SoInvaderColumn currentColumn)
     {
         GameObject newEnemy = 
         rAGameManager.poolManager.SpawnEntity(rAGameManager.EnemyObjectSource) as GameObject;
+        currentColumn.EnemyColumn.Add(newEnemy);
+        Ass_Enemy_ColumnSO.Add(newEnemy, currentColumn);
 
         Transform enemyTransform = newEnemy.GetComponent<Transform>();
 
