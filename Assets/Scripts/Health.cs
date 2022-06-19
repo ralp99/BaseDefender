@@ -67,7 +67,7 @@ public class Health : MonoBehaviour
         */
 
 
-
+        GameObject thisObjectForNameCheck = gameObject;
 
         Projectile hittingProjectile = col.gameObject.GetComponent<Projectile>();
 
@@ -81,6 +81,17 @@ public class Health : MonoBehaviour
             hittingProjectile.MyBulletType == BulletManager.BulletType.EnemyStandard)
         {
             HitHappens(col);
+        }
+
+        if (BulletVulnerability == BulletManager.Vulnerability.ToAll)
+        {
+           if ((hittingProjectile.MyBulletType == BulletManager.BulletType.EnemyStandard) ||
+               (hittingProjectile.MyBulletType == BulletManager.BulletType.HeroStandard))
+
+            {
+                HitHappens(col);
+            }
+
         }
 
     }

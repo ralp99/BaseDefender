@@ -119,6 +119,53 @@ public class ControllerManager : MonoBehaviour
             OnYbuttonPress?.Invoke();
         }
 
+
+        if (Input.GetKey(KeyCode.Z))
+        {
+            OnLeftThumbstick?.Invoke();
+        }
+
+
+
+        if (Input.GetKey(KeyCode.X))
+        {
+            OnRightThumbstick?.Invoke();
+        }
+
+
+        if (Input.GetKey(KeyCode.Space))
+        {
+            if (buttonAdelaying)
+            {
+                return;
+            }
+
+            StartCoroutine(ButtonLocker(ButtonsToLock.ButtonA));
+            OnAbuttonPress?.Invoke();
+        }
+
+
+
+        if (Input.GetKey(KeyCode.B))
+        {
+            if (buttonYdelaying)
+            {
+                return;
+            }
+            print("y button");
+            StartCoroutine(ButtonLocker(ButtonsToLock.ButtonY));
+            OnYbuttonPress?.Invoke();
+        }
+
+        /// kbm
+        /// 
+
+        // z x spc
+
+
+
+
+
     }
 
     bool buttonAdelaying;

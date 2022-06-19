@@ -18,7 +18,7 @@ public class RAGameManager : MonoBehaviour
     [HideInInspector]
     HeroShipController heroShipController;
 
-    public enum CharacterType { Hero, StandardEnemy, BonusShip}
+    public enum CharacterType { Hero, StandardEnemy, BonusShip, Shield}
 
     public UnityAction FireButtonAction;
     public bool FireButtonPressed;
@@ -47,11 +47,19 @@ public class RAGameManager : MonoBehaviour
     public GameObject HeroShipTransformSource;
     public GameObject HeroBulletSource;
     public GameObject EnemyBulletSource;
+    public GameObject ShieldSource;
     public SoInvaderColumn EnemyColumnSOs;
 
     //ingame entities
     public Transform GameParent;
     public Transform HeroShipTransform;
+
+    // shields
+    public int ShieldAmount = 4;
+    public float ShieldPlacementX;
+    public float ShieldPlacementY;
+    public float ShieldPadding;
+    public List<GameObject> ShieldList;
 
     public float GamefieldXMin;
     public float GamefieldXMax;
@@ -236,6 +244,7 @@ public class RAGameManager : MonoBehaviour
     {
         StartCoroutine(enemyMarchingController.SpawnEnemySet());
         CreateHeroShipTransform();
+        CreateShields();
     }
 
 
@@ -269,6 +278,54 @@ public class RAGameManager : MonoBehaviour
         newHeroObject = Instantiate(HeroShipTransformSource) as GameObject;
         HeroShipTransform = newHeroObject.transform;
         HeroShipTransform.SetParent(GameParent);
+    }
+
+    void CreateShields()
+    {
+
+       // return;
+
+       // float fieldWidth = GamefieldXMax - GamefieldXMin;
+        float lastXpos = ShieldPlacementX;
+        /*
+        float increaseAmount = ShieldPadding;
+        if (increaseAmount < 0)
+        {
+            increaseAmount = increaseAmount * -1;
+        }
+        */
+        if (ShieldList.Count>0)
+        {
+            for (int i = 0; i < ShieldList.Count; i++)
+            {
+                Destroy(ShieldList[i]);
+            }
+            ShieldList.Clear();
+        }
+
+
+
+        for (int i = 0; i < ShieldAmount; i++)
+        {
+            GameObject newShield = Instantiate(ShieldSource) as GameObject;
+            Transform shieldTransform = newShield.transform;
+            ShieldList.Add(newShield);
+
+            shieldTransform.SetParent(GameParent);
+
+            /*
+            if (i == 0)
+            {
+                lastXpos = 
+            }
+            */
+
+            shieldTransform.localPosition = new Vector3(lastXpos, ShieldPlacementY, 0);
+
+            lastXpos += ShieldPadding;
+
+
+        }
     }
 
     public void AddToScore(int addValue)
