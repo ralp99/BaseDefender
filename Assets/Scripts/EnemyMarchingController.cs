@@ -14,8 +14,6 @@ public class EnemyMarchingController : MonoBehaviour
     public float enemyShotDelay;
     public float enemyShotJitter;
 
-    private float currentEnemyMarchSpeed = 0;
-
     float newYpos = 0;
     bool shouldDescend = false;
 
@@ -40,7 +38,6 @@ public class EnemyMarchingController : MonoBehaviour
         paddingEnemyY = rAGameManager.PaddingEnemyY;
         enemyShotDelay = rAGameManager.EnemyShotDelay;
         enemyShotJitter = rAGameManager.EnemyShotJitter;
-        currentEnemyMarchSpeed = rAGameManager.EnemyMarchSpeed;
 
         enemySpawnBegin = rAGameManager.EnemySpawnBegin;
     }
@@ -159,6 +156,7 @@ public class EnemyMarchingController : MonoBehaviour
         }
 
         shouldDescend = false;
+        float marchSpeed = rAGameManager.CurrentEnemyMarchSpeed;
 
         for (int i = 0; i < rAGameManager.EnemyPoolActive.Count; i++)
         {
@@ -167,13 +165,13 @@ public class EnemyMarchingController : MonoBehaviour
             if (doMarchEnemy)
             {
                 bool canReverseMarch = i == 0;
-                MarchEnemy(currentEnemyTransform, canReverseMarch);
+                MarchSingleEnemy(currentEnemyTransform, canReverseMarch, marchSpeed);
             }
         }
     }
 
 
-    void MarchEnemy(Transform currentEnemyTransform, bool canReverseMarch)
+    void MarchSingleEnemy(Transform currentEnemyTransform, bool canReverseMarch, float currentEnemyMarchSpeed)
     {
         float newXpos = currentEnemyMarchSpeed;
 
