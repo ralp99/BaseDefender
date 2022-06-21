@@ -9,11 +9,21 @@ public class Health : MonoBehaviour
     public int MaxHealth;
     public BulletManager.Vulnerability BulletVulnerability;
     private CharacterObject characterObject;
+    private Projectile projectile;
     private RAGameManager rAGameManager;
 
     private void Start()
     {
-        characterObject = GetComponent<CharacterObject>();
+        if (GetComponent<CharacterObject>())
+        {
+            characterObject = GetComponent<CharacterObject>();
+        }
+
+        if (GetComponent<Projectile>())
+        {
+            projectile = GetComponent<Projectile>();
+        }
+
         rAGameManager = RAGameManager.Instance;
         RestartCharacter();
     }
@@ -30,13 +40,27 @@ public class Health : MonoBehaviour
     void KillCharacter()
     {
         gameObject.SetActive(false);
-        rAGameManager.AddToScore(characterObject.PointValue);
+    
         if (rAGameManager.enemyMarchingController.Ass_Enemy_ColumnSO.ContainsKey(gameObject))
         {
             // get list val in index
             rAGameManager.enemyMarchingController.Ass_Enemy_ColumnSO[gameObject].EnemyColumn.Remove(gameObject);
         }
-        characterObject.CharacterDead();
+
+        if (characterObject)
+        {
+            rAGameManager.AddToScore(characterObject.PointValue);
+            characterObject.CharacterDead();
+            if (characterObject.CharacterType == RAGameManager.CharacterType.StandardEnemy)
+            {
+                rAGameManager.IncreaseEnemySpeedAtDeath();
+            }
+        }
+
+        if (projectile)
+        {
+
+        }
     }
 
     public void RestartCharacter()
@@ -69,31 +93,35 @@ public class Health : MonoBehaviour
 
         GameObject thisObjectForNameCheck = gameObject;
 
-        Projectile hittingProjectile = col.gameObject.GetComponent<Projectile>();
 
-        if (BulletVulnerability == BulletManager.Vulnerability.ToHero && 
-            hittingProjectile.MyBulletType == BulletManager.BulletType.HeroStandard)
+        if (col.gameObject.GetComponent<Projectile>())
         {
-            HitHappens(col);
-        }
 
-        if (BulletVulnerability == BulletManager.Vulnerability.ToEnemy &&
-            hittingProjectile.MyBulletType == BulletManager.BulletType.EnemyStandard)
-        {
-            HitHappens(col);
-        }
+            Projectile hittingProjectile = col.gameObject.GetComponent<Projectile>();
 
-        if (BulletVulnerability == BulletManager.Vulnerability.ToAll)
-        {
-           if ((hittingProjectile.MyBulletType == BulletManager.BulletType.EnemyStandard) ||
-               (hittingProjectile.MyBulletType == BulletManager.BulletType.HeroStandard))
-
+            if (BulletVulnerability == BulletManager.Vulnerability.ToHero &&
+                hittingProjectile.MyBulletType == BulletManager.BulletType.HeroStandard)
             {
                 HitHappens(col);
             }
 
-        }
+            if (BulletVulnerability == BulletManager.Vulnerability.ToEnemy &&
+                hittingProjectile.MyBulletType == BulletManager.BulletType.EnemyStandard)
+            {
+                HitHappens(col);
+            }
 
+            if (BulletVulnerability == BulletManager.Vulnerability.ToAll)
+            {
+                if ((hittingProjectile.MyBulletType == BulletManager.BulletType.EnemyStandard) ||
+                    (hittingProjectile.MyBulletType == BulletManager.BulletType.HeroStandard))
+
+                {
+                    HitHappens(col);
+                }
+
+            }
+        }
     }
 
     void HitHappens(GameObject col)

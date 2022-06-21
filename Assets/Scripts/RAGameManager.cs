@@ -30,10 +30,16 @@ public class RAGameManager : MonoBehaviour
     public float MovementSpeedMultiplierHero = 1.0f;
     public float MovementSpeedMultiplierEnemy = 1.0f;
 
-    public float EnemyMarchSpeed = 0.25f;
+    [Space]
+    public float BeginEnemyMarchSpeed = 0.025f;
+    public float CurrentEnemyMarchSpeed = 0.0f;
     public float EnemyDescendAmount = 0.0f;
     public float HeroTravelSpeed = 1.0f;
 
+    [Space]
+    public float PercentageSpeedIncOnEnemyDeath = 5.0f;
+    public float PercentageSpeedIncOnRowAdvance = 5.0f;
+    public float EnemySpeedLimit = 1000.0f;
 
     ///game settings
     ///
@@ -233,6 +239,7 @@ public class RAGameManager : MonoBehaviour
     {
         LivesRemaining = LivesStart;
         CurrentScore = 0;
+        CurrentEnemyMarchSpeed = BeginEnemyMarchSpeed;
         BeginRound();
         heroShipController.HeroShipInit();
         uIController.UIVisibility(false);
@@ -338,6 +345,33 @@ public class RAGameManager : MonoBehaviour
 
         enemyMarchingController.EvaluateBottomRowEnemies();
     }
+
+    public void IncreaseEnemySpeedAtDeath()
+    {
+        float newSpeed = PercentageSpeedIncOnEnemyDeath;
+        IncreaseEnemySpeedByPercent(newSpeed);
+    }
+
+    public void IncreaseEnemySpeedAtRowAdvance()
+    {
+        float newSpeed = PercentageSpeedIncOnRowAdvance;
+        IncreaseEnemySpeedByPercent(newSpeed);
+    }
+
+    private void IncreaseEnemySpeedByPercent(float increasePercent)
+    {
+        float increaseAmount = CurrentEnemyMarchSpeed / increasePercent;
+        CurrentEnemyMarchSpeed = CurrentEnemyMarchSpeed + increaseAmount;
+        if (CurrentEnemyMarchSpeed > EnemySpeedLimit)
+        {
+            CurrentEnemyMarchSpeed = EnemySpeedLimit;
+        }
+
+
+
+    }
+
+
 
     public void ChangePauseState()
     {

@@ -208,9 +208,13 @@ MonoBehaviour:
   ShotSpeedMultiplierEnemy: 0.2
   MovementSpeedMultiplierHero: 1
   MovementSpeedMultiplierEnemy: 1
-  EnemyMarchSpeed: 0.025
+  BeginEnemyMarchSpeed: 0.025
+  CurrentEnemyMarchSpeed: 0
   EnemyDescendAmount: 0.5
   HeroTravelSpeed: 0.15
+  PercentageSpeedIncOnEnemyDeath: 2.3
+  PercentageSpeedIncOnRowAdvance: 2.5
+  EnemySpeedLimit: 0.8
   GameIsPaused: 0
   GameplayAvailable: 0
   GameIsOver: 0
@@ -222,7 +226,7 @@ MonoBehaviour:
     type: 3}
   EnemyBulletSource: {fileID: 6122161258633207358, guid: 30ec6cb248084ec499bc3d9cb10966aa,
     type: 3}
-  ShieldSource: {fileID: 768836384819544259, guid: e3e1bf7a69742414191464b16f825a0f,
+  ShieldSource: {fileID: 768836384819544259, guid: c231bd3426ac87342b94a5891ebe3cf3,
     type: 3}
   EnemyColumnSOs: {fileID: 11400000, guid: 5d00999c97bf6a34c86dee22e99a29dc, type: 2}
   GameParent: {fileID: 1731169628}

@@ -14,6 +14,8 @@ GameObject:
   - component: {fileID: 6063841577528559499}
   - component: {fileID: 1185205920681336044}
   - component: {fileID: 1297005189065413235}
+  - component: {fileID: -9194454985161869465}
+  - component: {fileID: 7754764797682120913}
   m_Layer: 0
   m_Name: enemyBulletPrefab
   m_TagString: Untagged
@@ -127,3 +129,34 @@ MonoBehaviour:
   MyUsingSpeed: 0
   DestroyIfOutOfBounds: 1
   DealDamage: 1
+--- !u!54 &-9194454985161869465
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6122161258633207358}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
+--- !u!114 &7754764797682120913
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6122161258633207358}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b28ab8f7a3a26b408691c0535400d2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CurrentHealth: 1
+  MaxHealth: 0
+  BulletVulnerability: 0
