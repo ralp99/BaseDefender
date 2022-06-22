@@ -54,6 +54,11 @@ public class HeroShipController : MonoBehaviour
 
     public void HeroShipInit()
     {
+        if (!rAGameManager)
+        {
+            rAGameManager = RAGameManager.Instance;
+        }
+
         HeroShipTransform = rAGameManager.HeroShipTransform;
         HeroShipCharacterCheck();
     }

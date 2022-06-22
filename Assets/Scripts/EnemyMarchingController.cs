@@ -15,6 +15,7 @@ public class EnemyMarchingController : MonoBehaviour
     public float enemyShotJitter;
 
     float newYpos = 0;
+    int rowCounter = 0;
     bool shouldDescend = false;
 
     private float furthestEnemyPosLeft;
@@ -124,8 +125,6 @@ public class EnemyMarchingController : MonoBehaviour
 
 
 
-
-
     void EnemyPositionCheck(Transform enemyPos)
     {
         float checkXpos = enemyPos.localPosition.x;
@@ -165,13 +164,13 @@ public class EnemyMarchingController : MonoBehaviour
             if (doMarchEnemy)
             {
                 bool canReverseMarch = i == 0;
-                MarchSingleEnemy(currentEnemyTransform, canReverseMarch, marchSpeed);
+                MarchSingleEnemy(currentEnemyTransform, canReverseMarch, marchSpeed, i);
             }
         }
+
     }
 
-
-    void MarchSingleEnemy(Transform currentEnemyTransform, bool canReverseMarch, float currentEnemyMarchSpeed)
+    void MarchSingleEnemy(Transform currentEnemyTransform, bool canReverseMarch, float currentEnemyMarchSpeed, int currentEnemyListPos)
     {
         float newXpos = currentEnemyMarchSpeed;
 
@@ -208,11 +207,23 @@ public class EnemyMarchingController : MonoBehaviour
         if (shouldDescend)
         {
             assignYpos -= rAGameManager.EnemyDescendAmount;
+            int thisPos = currentEnemyListPos;
+            int listSize = rAGameManager.EnemyPoolActive.Count-1;
+          
+            if (thisPos == 0 || thisPos == listSize)
+            {
+                rowCounter++;
+                if (rowCounter > rAGameManager.EnemyRows)
+                {
+                    rowCounter = 0;
+                    rAGameManager.IncreaseEnemySpeedAtRowAdvance();
+                }
+            }
         }
 
         currentEnemyTransform.localPosition = new Vector3(assignXpos, assignYpos, 0);
-
     }
+
 
     public void EvaluateBottomRowEnemies()
     {

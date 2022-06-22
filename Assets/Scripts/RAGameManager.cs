@@ -20,6 +20,7 @@ public class RAGameManager : MonoBehaviour
 
     public enum CharacterType { Hero, StandardEnemy, BonusShip, Shield}
 
+    public bool RunAtStart;
     public UnityAction FireButtonAction;
     public bool FireButtonPressed;
 
@@ -127,6 +128,8 @@ public class RAGameManager : MonoBehaviour
         bulletManager.MoveAllBullets();
         CheckForLivesEnd();
         CheckForRoundEnd();
+  //      print("02 finishedGameLoop");
+
     }
 
 
@@ -231,9 +234,13 @@ public class RAGameManager : MonoBehaviour
         uIController = GetComponent<UIController>();
         uIController.UIVisibility(true);
 
-        // this should be launched by a button press
-        // RestartGame();
+        if (RunAtStart)
+        {
+            RestartGame();
+        }
+
     }
+
 
     public void RestartGame()
     {

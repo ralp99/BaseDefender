@@ -203,12 +203,13 @@ MonoBehaviour:
   bulletManager: {fileID: 0}
   poolManager: {fileID: 0}
   uIController: {fileID: 0}
+  RunAtStart: 1
   FireButtonPressed: 0
   ShotSpeedMultiplierHero: 0.2
   ShotSpeedMultiplierEnemy: 0.2
   MovementSpeedMultiplierHero: 1
   MovementSpeedMultiplierEnemy: 1
-  BeginEnemyMarchSpeed: 0.025
+  BeginEnemyMarchSpeed: 0.024
   CurrentEnemyMarchSpeed: 0
   EnemyDescendAmount: 0.5
   HeroTravelSpeed: 0.15
