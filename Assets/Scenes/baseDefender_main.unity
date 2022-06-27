@@ -209,12 +209,12 @@ MonoBehaviour:
   ShotSpeedMultiplierEnemy: 0.2
   MovementSpeedMultiplierHero: 1
   MovementSpeedMultiplierEnemy: 1
-  BeginEnemyMarchSpeed: 0.024
+  BeginEnemyMarchSpeed: 0.0067
   CurrentEnemyMarchSpeed: 0
   EnemyDescendAmount: 0.5
-  HeroTravelSpeed: 0.15
-  PercentageSpeedIncOnEnemyDeath: 2.3
-  PercentageSpeedIncOnRowAdvance: 2.5
+  HeroTravelSpeed: 0.055
+  PercentageSpeedIncOnEnemyDeath: 0.52
+  PercentageSpeedIncOnRowAdvance: 0.15
   EnemySpeedLimit: 0.8
   GameIsPaused: 0
   GameplayAvailable: 0
@@ -248,7 +248,7 @@ MonoBehaviour:
   EnemyShotLimit: 2
   EnemyShotDelay: 1
   EnemyShotJitter: 0.13
-  EnemiesContainBulletsBelow: 7.5
+  EnemiesContainBulletsBelow: 8
   PaddingEnemyX: 3
   PaddingEnemyY: 4
   EnemySpawnBegin: {x: -15, y: 20}

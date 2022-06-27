@@ -368,14 +368,13 @@ public class RAGameManager : MonoBehaviour
 
     private void IncreaseEnemySpeedByPercent(float increasePercent)
     {
-        float increaseAmount = CurrentEnemyMarchSpeed / increasePercent;
+        float increaseAmount = (increasePercent * 0.1f) * CurrentEnemyMarchSpeed;
+
         CurrentEnemyMarchSpeed = CurrentEnemyMarchSpeed + increaseAmount;
         if (CurrentEnemyMarchSpeed > EnemySpeedLimit)
         {
             CurrentEnemyMarchSpeed = EnemySpeedLimit;
         }
-
-
 
     }
 
