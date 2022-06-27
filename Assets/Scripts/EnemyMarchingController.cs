@@ -22,10 +22,13 @@ public class EnemyMarchingController : MonoBehaviour
     private float furthestEnemyPosRight;
     private float furthestEnemyPosDown;
     private bool enemiesMarchLeft = true;
+    private float enemiesContainBulletsBelow;
+
 
     public Dictionary<GameObject, SoInvaderColumn> Ass_Enemy_ColumnSO = new Dictionary<GameObject, SoInvaderColumn>();
 
     public List<GameObject> BottomRowEnemies = new List<GameObject>();
+    public List<GameObject> SmasherEnemies = new List<GameObject>();
     public IEnumerator EnemyShotTimerCached;
 
     RAGameManager rAGameManager;
@@ -39,6 +42,7 @@ public class EnemyMarchingController : MonoBehaviour
         paddingEnemyY = rAGameManager.PaddingEnemyY;
         enemyShotDelay = rAGameManager.EnemyShotDelay;
         enemyShotJitter = rAGameManager.EnemyShotJitter;
+        enemiesContainBulletsBelow = rAGameManager.EnemiesContainBulletsBelow;
 
         enemySpawnBegin = rAGameManager.EnemySpawnBegin;
     }
@@ -146,6 +150,8 @@ public class EnemyMarchingController : MonoBehaviour
         }
     }
 
+
+
     // called from gameLoop
     public void PerformAllEnemyPosChecks(bool doMarchEnemy)
     {
@@ -165,6 +171,7 @@ public class EnemyMarchingController : MonoBehaviour
             {
                 bool canReverseMarch = i == 0;
                 MarchSingleEnemy(currentEnemyTransform, canReverseMarch, marchSpeed, i);
+                SeeIfBottomShouldArm(currentEnemyTransform.gameObject);
             }
         }
 
@@ -240,6 +247,32 @@ public class EnemyMarchingController : MonoBehaviour
             }
         }
     }
+
+
+    void SeeIfBottomShouldArm(GameObject currentEnemy)
+    {
+        if (SmasherEnemies.Contains(currentEnemy))
+        {
+            return;
+        }
+
+        Transform enemyTransform = currentEnemy.transform;
+
+        if (enemyTransform.localPosition.y < enemiesContainBulletsBelow)
+        {
+        //    print("adding smasher enemy");
+            SmasherEnemies.Add(currentEnemy);
+            
+            Projectile myProjectile = currentEnemy.AddComponent<Projectile>() as Projectile;
+            myProjectile.DontKillSelfAtCollision = true;
+
+            Rigidbody rigidbody = currentEnemy.AddComponent<Rigidbody>() as Rigidbody;
+            rigidbody.useGravity = false;
+            rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+        }
+    }
+
+
 
     public IEnumerator EnemyShotTimer()
     {

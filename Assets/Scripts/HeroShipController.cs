@@ -68,7 +68,7 @@ public class HeroShipController : MonoBehaviour
     {
         if (!HeroShipCharacter)
         {
-            HeroShipCharacter = HeroShipTransform.GetComponent<CharacterObject>();
+            HeroShipCharacter = HeroShipTransform.GetComponent<CharacterObject>();  // crashed at collision w enemy I think
         }
     }
 

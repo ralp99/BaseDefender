@@ -14,6 +14,11 @@ public class Projectile : MonoBehaviour
     public bool DestroyIfOutOfBounds = true;
     public int DealDamage = 1;
 
+    public bool DontKillSelfAtCollision;
+
+    public Transform SpawnedFrom;
+    public bool FollowSpawner;
+
     RAGameManager rAGameManager;
 
     void Start()
@@ -36,7 +41,6 @@ public class Projectile : MonoBehaviour
         {
             MyUsingSpeed = OverrideSpeed;
         }
-   
     }
 
 }

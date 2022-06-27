@@ -54,7 +54,6 @@ public class BulletManager : MonoBehaviour
             // CRASH HERE AFTER ROUND CLEAR
             bulletTransform.localPosition = spawningCharacter.GetComponent<Transform>().localPosition;  
         }
-
     }
 
     public void MoveAllBullets()

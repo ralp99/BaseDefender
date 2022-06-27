@@ -56,6 +56,21 @@ public class CharacterObject : MonoBehaviour
         {
             rAGameManager.HeroKilled();
         }
+
+        if (rAGameManager.enemyMarchingController.SmasherEnemies.Contains(gameObject))
+        {
+            rAGameManager.enemyMarchingController.SmasherEnemies.Remove(gameObject);
+          
+            if (gameObject.GetComponent<Rigidbody>())
+            {
+                Destroy(gameObject.GetComponent<Rigidbody>());
+            }
+
+            if (gameObject.GetComponent<Projectile>())
+            {
+                Destroy(gameObject.GetComponent<Projectile>());
+            }
+        }
     }
 
 }

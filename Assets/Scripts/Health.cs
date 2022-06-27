@@ -126,7 +126,16 @@ public class Health : MonoBehaviour
 
     void HitHappens(GameObject col)
     {
-        col.gameObject.SetActive(false);
+
+        bool projectileStateAfterCollision = false;
+
+        if (col.GetComponent<Projectile>())
+        {
+            projectileStateAfterCollision =
+                col.GetComponent<Projectile>().DontKillSelfAtCollision;
+        }
+
+        col.gameObject.SetActive(projectileStateAfterCollision);
         DealDamage(col.GetComponent<Projectile>());
     }
 

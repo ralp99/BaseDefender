@@ -80,6 +80,7 @@ public class RAGameManager : MonoBehaviour
     public int EnemyShotLimit = 2;
     public float EnemyShotDelay = 1.0f;
     public float EnemyShotJitter = 0.13f;
+    public float EnemiesContainBulletsBelow = 1.0f;
 
     [Space]
     public float PaddingEnemyX;

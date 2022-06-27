@@ -248,6 +248,7 @@ MonoBehaviour:
   EnemyShotLimit: 2
   EnemyShotDelay: 1
   EnemyShotJitter: 0.13
+  EnemiesContainBulletsBelow: 7.5
   PaddingEnemyX: 3
   PaddingEnemyY: 4
   EnemySpawnBegin: {x: -15, y: 20}
@@ -317,6 +318,7 @@ MonoBehaviour:
   enemyShotDelay: 0
   enemyShotJitter: 0
   BottomRowEnemies: []
+  SmasherEnemies: []
 --- !u!114 &556115957
 MonoBehaviour:
   m_ObjectHideFlags: 0
