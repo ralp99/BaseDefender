@@ -24,7 +24,12 @@ public class SoManagerValues : ScriptableObject
     public float EnemySpeedLimit = 1000.0f;
     [Space]
     public int ShieldAmount = 4;
+    [Range(0,1)]
     public float ShieldPlacementY;
+    [Space]
+    [Range(0, 1)]
+    public float BonusShipPlacementY;
+
     [Space]
     public float HorizontalRangeBorder = 5.0f;
     public float CeilingBorder = 5.0f;
@@ -44,5 +49,8 @@ public class SoManagerValues : ScriptableObject
 
     public int LivesStart = 3;
 
+    public float BonusShipDelay;
+    public float BonusShipJitter;
+    public int BonusShipAppearancesPerRound;
 
 }

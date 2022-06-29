@@ -17,6 +17,8 @@ public class RAGameManager : MonoBehaviour
     public UIController uIController;
     [HideInInspector]
     HeroShipController heroShipController;
+    [HideInInspector]
+    BonusShipManager bonusShipManager;
 
     public enum CharacterType { Hero, StandardEnemy, BonusShip, Shield}
 
@@ -55,6 +57,7 @@ public class RAGameManager : MonoBehaviour
 
     // sources
     public GameObject EnemyObjectSource;
+    public GameObject EnemyBonusShipObjectSource;
     public GameObject HeroShipTransformSource;
     public GameObject HeroBulletSource;
     public GameObject EnemyBulletSource;
@@ -67,7 +70,6 @@ public class RAGameManager : MonoBehaviour
 
     // shields
     private int ShieldAmount = 4;
-    public float ShieldPlacementX;
     private float ShieldPlacementY;
     public List<GameObject> ShieldList;
 
@@ -106,6 +108,13 @@ public class RAGameManager : MonoBehaviour
 
     // stats
     private int LivesStart = 3;
+    [HideInInspector]
+    public float BonusShipDelay;
+    [HideInInspector]
+    public float BonusShipJitter;
+    [HideInInspector]
+    public int BonusShipAppearancesPerRound;
+
     [Space]
     public int LivesRemaining;
     public int CurrentScore;
@@ -123,6 +132,9 @@ public class RAGameManager : MonoBehaviour
     public List<SoInvaderColumn> InvaderColumns = new List<SoInvaderColumn>();
 
     public bool CanRunGameLoop = false;
+    public bool ResetHiScore;
+    [HideInInspector]
+    public bool SoValuesInjected;
 
     /// <summary>
     /// notes
@@ -177,8 +189,12 @@ public class RAGameManager : MonoBehaviour
         EnemySpawnBegin = soManagerValues.EnemySpawnBegin;
         EnemyColumns = soManagerValues.EnemyColumns;
         EnemyRows = soManagerValues.EnemyRows;
+        BonusShipDelay = soManagerValues.BonusShipDelay;
+        BonusShipJitter = soManagerValues.BonusShipJitter;
+        BonusShipAppearancesPerRound = soManagerValues.BonusShipAppearancesPerRound;
 
         LivesStart = soManagerValues.LivesStart;
+        SoValuesInjected = true;
     }
 
 
@@ -186,6 +202,7 @@ public class RAGameManager : MonoBehaviour
     {
         CanRunGameLoop = true;
         bulletManager.DefineBounds();
+        bonusShipManager.StartBonusShipTimer();
     }
 
     void CheckForRoundEnd()
@@ -201,6 +218,10 @@ public class RAGameManager : MonoBehaviour
         }
     }
 
+
+
+
+    // redundant?
     void CheckForLivesEnd()
     {
         if (LivesRemaining == 0)
@@ -209,8 +230,18 @@ public class RAGameManager : MonoBehaviour
         }
     }
 
-    void GameOver()
+
+
+    public void GameOver()
     {
+        int currentHiscore = HiscorePPrefCheck();
+
+        if (CurrentScore > currentHiscore)
+        {
+            HiScore = CurrentScore;
+            PlayerPrefs.SetInt("baseDefenderHiscore", HiScore);
+        }
+
         CanRunGameLoop = false;
         enemyMarchingController.KillShotCache();
         ClearEntities();
@@ -242,7 +273,7 @@ public class RAGameManager : MonoBehaviour
         }
 
         DestroyHeroTransform();
-
+        bonusShipManager.CancelBonusShipTimer();
     }
 
     void DestroyHeroTransform()
@@ -281,8 +312,14 @@ public class RAGameManager : MonoBehaviour
         bulletManager = GetComponent<BulletManager>();
         poolManager = GetComponent<PoolManager>();
         heroShipController = GetComponent<HeroShipController>();
+        bonusShipManager = GetComponent<BonusShipManager>();
         uIController = GetComponent<UIController>();
         uIController.UIVisibility(true);
+        if (ResetHiScore)
+        {
+            PlayerPrefs.SetInt("baseDefenderHiscore", 0);
+        }
+        HiScore = HiscorePPrefCheck();
 
         if (RunAtStart)
         {
@@ -345,7 +382,6 @@ public class RAGameManager : MonoBehaviour
     }
 
 
-
     IEnumerator CreateShields()
     {
 
@@ -354,6 +390,22 @@ public class RAGameManager : MonoBehaviour
             yield return null;
         }
 
+        // destroy existing shield objects
+        if (ShieldList.Count > 0)
+        {
+            for (int i = 0; i < ShieldList.Count; i++)
+            {
+                Destroy(ShieldList[i]);
+            }
+            ShieldList.Clear();
+        }
+
+
+        // get shields Y position
+        float  useYplacement = Mathf.Lerp(GamefieldYMin, GamefieldYMax, ShieldPlacementY);
+
+
+        // populate a list of shields X positions
         List<float> ShieldXposList = new List<float>();
         float wholeFieldLength = GamefieldXMax - GamefieldXMin;
         float xPos = wholeFieldLength / ShieldAmount;
@@ -372,17 +424,7 @@ public class RAGameManager : MonoBehaviour
 
             ShieldXposList.Add(newUsePos);
         }
-
-        if (ShieldList.Count>0)
-        {
-            for (int i = 0; i < ShieldList.Count; i++)
-            {
-                Destroy(ShieldList[i]);
-            }
-            ShieldList.Clear();
-        }
-
-
+   
         for (int i = 0; i < ShieldXposList.Count; i++)
         {
             GameObject newShield = Instantiate(ShieldSource) as GameObject;
@@ -390,9 +432,14 @@ public class RAGameManager : MonoBehaviour
             ShieldList.Add(newShield);
 
             shieldTransform.SetParent(GameParent);
-            shieldTransform.localPosition = new Vector3(ShieldXposList[i], ShieldPlacementY, 0);
+            shieldTransform.localPosition = new Vector3(ShieldXposList[i], useYplacement, 0);
         }
 
+    }
+
+    int HiscorePPrefCheck()
+    {
+        return PlayerPrefs.GetInt("baseDefenderHiscore");
     }
 
     public void AddToScore(int addValue)
@@ -427,7 +474,6 @@ public class RAGameManager : MonoBehaviour
         {
             CurrentEnemyMarchSpeed = EnemySpeedLimit;
         }
-
     }
 
 

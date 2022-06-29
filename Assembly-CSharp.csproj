@@ -64,6 +64,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\BonusShipManager.cs" />
+    <Compile Include="Assets\Scripts\BonusShipMover.cs" />
     <Compile Include="Assets\Scripts\BulletManager.cs" />
     <Compile Include="Assets\Scripts\CharacterObject.cs" />
     <Compile Include="Assets\Scripts\CharacterSettings.cs" />

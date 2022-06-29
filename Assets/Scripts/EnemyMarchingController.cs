@@ -24,7 +24,6 @@ public class EnemyMarchingController : MonoBehaviour
     private bool enemiesMarchLeft = true;
     private float enemiesContainBulletsBelow;
 
-
     public Dictionary<GameObject, SoInvaderColumn> Ass_Enemy_ColumnSO = new Dictionary<GameObject, SoInvaderColumn>();
 
     public List<GameObject> BottomRowEnemies = new List<GameObject>();
@@ -50,11 +49,14 @@ public class EnemyMarchingController : MonoBehaviour
 
     public IEnumerator SpawnEnemySet()
     {
-
         while (!rAGameManager)
         {
             yield return null;
         }
+
+        furthestEnemyPosRight = 0;
+        furthestEnemyPosLeft = 0;
+        furthestEnemyPosDown = 0;
 
         Ass_Enemy_ColumnSO.Clear();
 
@@ -134,6 +136,14 @@ public class EnemyMarchingController : MonoBehaviour
         float checkXpos = enemyPos.localPosition.x;
         float checkYpos = enemyPos.localPosition.y;
 
+        if (rAGameManager.HeroShipTransform)
+        {
+            if (checkYpos <= rAGameManager.HeroShipTransform.localPosition.y)
+            {
+                rAGameManager.GameOver();
+            }
+        }
+
         if (checkXpos < furthestEnemyPosLeft)
         {
             furthestEnemyPosLeft = checkXpos;
@@ -174,7 +184,6 @@ public class EnemyMarchingController : MonoBehaviour
                 SeeIfBottomShouldArm(currentEnemyTransform.gameObject);
             }
         }
-
     }
 
     void MarchSingleEnemy(Transform currentEnemyTransform, bool canReverseMarch, float currentEnemyMarchSpeed, int currentEnemyListPos)
@@ -271,8 +280,6 @@ public class EnemyMarchingController : MonoBehaviour
             rigidbody.constraints = RigidbodyConstraints.FreezeAll;
         }
     }
-
-
 
     public IEnumerator EnemyShotTimer()
     {

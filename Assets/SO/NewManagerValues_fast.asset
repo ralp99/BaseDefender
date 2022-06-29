@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0d3e52f83ee8f504b9cfb4f7b0f686d5, type: 3}
-  m_Name: NewManagerValues
+  m_Name: NewManagerValues_fast
   m_EditorClassIdentifier: 
   ShotSpeedMultiplierHero: 0.2
   ShotSpeedMultiplierEnemy: 0.2
   MovementSpeedMultiplierHero: 1
   MovementSpeedMultiplierEnemy: 1
-  BeginEnemyMarchSpeed: 0.0067
+  BeginEnemyMarchSpeed: 0.2
   EnemyDescendAmount: 0.5
   HeroTravelSpeed: 0.055
   PercSpdIncOnEnemyDeath: 0.52
@@ -39,6 +39,5 @@ MonoBehaviour:
   EnemyColumns: 11
   EnemyRows: 5
   LivesStart: 3
-  BonusShipDelay: 5
-  BonusShipJitter: 1
-  BonusShipAppearancesPerRound: 3
+  BonusShipDelay: 30
+  BonusShipJitter: 5

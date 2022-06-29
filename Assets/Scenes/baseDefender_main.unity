@@ -166,6 +166,7 @@ GameObject:
   - component: {fileID: 556115958}
   - component: {fileID: 556115959}
   - component: {fileID: 556115960}
+  - component: {fileID: 556115961}
   m_Layer: 0
   m_Name: gameManager
   m_TagString: Untagged
@@ -205,7 +206,7 @@ MonoBehaviour:
   uIController: {fileID: 0}
   RunAtStart: 1
   FireButtonPressed: 0
-  soManagerValues: {fileID: 11400000, guid: fd38b93565ee44c4a9f2025586e266d2, type: 2}
+  soManagerValues: {fileID: 11400000, guid: 9d07912012f49d34297a51fe7d00f71e, type: 2}
   ShotSpeedMultiplierHero: 0.2
   ShotSpeedMultiplierEnemy: 0.2
   CurrentEnemyMarchSpeed: 0
@@ -215,6 +216,8 @@ MonoBehaviour:
   GameplayAvailable: 0
   GameIsOver: 0
   EnemyObjectSource: {fileID: 6122161258633207358, guid: 1b95f3e710020e24eb14c433bfe9c1b6,
+    type: 3}
+  EnemyBonusShipObjectSource: {fileID: 6122161258633207358, guid: 744cc0d5ca511ed47bf970a9fbd523cf,
     type: 3}
   HeroShipTransformSource: {fileID: 6122161258633207358, guid: 090f5c9c8811ea64ca3769c4263c51bc,
     type: 3}
@@ -228,7 +231,6 @@ MonoBehaviour:
   GameParent: {fileID: 1731169628}
   HeroShipTransform: {fileID: 0}
   ShieldPlacementX: -14
-  ShieldPadding: 9.25
   ShieldList: []
   GamefieldXMin: 0
   GamefieldXMax: 0
@@ -246,6 +248,9 @@ MonoBehaviour:
   EnemySpawnBegin: {x: -15, y: 20}
   EnemyColumns: 11
   EnemyRows: 5
+  BonusShipDelay: 0
+  BonusShipJitter: 0
+  BonusShipAppearancesPerRound: 0
   LivesRemaining: 0
   CurrentScore: 0
   HiScore: 0
@@ -257,7 +262,8 @@ MonoBehaviour:
   HeroBulletPoolDead: []
   InvaderColumns: []
   CanRunGameLoop: 0
-  ShieldXposList: []
+  ResetHiScore: 0
+  SoValuesInjected: 0
 --- !u!114 &556115955
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -360,6 +366,18 @@ MonoBehaviour:
   ScoreText: {fileID: 1821950327}
   HiscoreText: {fileID: 710755788}
   CanvasObject: {fileID: 1898904346}
+--- !u!114 &556115961
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 556115952}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e773dc1328732934e8e7a172f74ca273, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &604315448
 GameObject:
   m_ObjectHideFlags: 0

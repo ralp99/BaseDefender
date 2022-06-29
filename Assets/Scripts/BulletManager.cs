@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BulletManager : MonoBehaviour
 {
-    public enum BulletType { HeroStandard, EnemyStandard, Override }
+    public enum BulletType { HeroStandard, EnemyStandard, Override, None }
     public enum Vulnerability { ToHero, ToEnemy, ToAll, ToNone }
     public enum BulletDirection { NA, Forward, Backward, Left, Right, Above, Below }
     public enum BulletSpeed { ByType, Override}
@@ -16,12 +16,12 @@ public class BulletManager : MonoBehaviour
     public Dictionary<Projectile, float> Ass_Projectile_Speed = new Dictionary<Projectile, float>();
     public Dictionary<Projectile, bool> Ass_Projectile_BoundsDestroy = new Dictionary<Projectile, bool>();
 
-    RAGameManager rAGameManager;
+    private RAGameManager rAGameManager;
 
-    float boundsMinX;
-    float boundsMinY;
-    float boundsMaxX;
-    float boundsMaxY;
+    private float boundsMinX;
+    private float boundsMinY;
+    private float boundsMaxX;
+    private float boundsMaxY;
 
 
     void Start()
@@ -51,7 +51,7 @@ public class BulletManager : MonoBehaviour
         }
         else
         {
-            // CRASH HERE AFTER ROUND CLEAR
+            // CRASH HERE AFTER ROUND CLEAR -- dunno if still happens
             bulletTransform.localPosition = spawningCharacter.GetComponent<Transform>().localPosition;  
         }
     }
