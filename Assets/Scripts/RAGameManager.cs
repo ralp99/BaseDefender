@@ -23,24 +23,28 @@ public class RAGameManager : MonoBehaviour
     public bool RunAtStart;
     public UnityAction FireButtonAction;
     public bool FireButtonPressed;
+    public SoManagerValues soManagerValues;
 
     // ----------------------------
 
+    [HideInInspector]
     public float ShotSpeedMultiplierHero = 1.0f;
+    [HideInInspector]
     public float ShotSpeedMultiplierEnemy = 1.0f;
-    public float MovementSpeedMultiplierHero = 1.0f;
-    public float MovementSpeedMultiplierEnemy = 1.0f;
+    private float MovementSpeedMultiplierHero = 1.0f;
+    private float MovementSpeedMultiplierEnemy = 1.0f;
 
+    private float BeginEnemyMarchSpeed = 0.025f;
     [Space]
-    public float BeginEnemyMarchSpeed = 0.025f;
     public float CurrentEnemyMarchSpeed = 0.0f;
+    [HideInInspector]
     public float EnemyDescendAmount = 0.0f;
+    [HideInInspector]
     public float HeroTravelSpeed = 1.0f;
 
-    [Space]
-    public float PercentageSpeedIncOnEnemyDeath = 5.0f;
-    public float PercentageSpeedIncOnRowAdvance = 5.0f;
-    public float EnemySpeedLimit = 1000.0f;
+    private float PercSpdIncOnEnemyDeath = 5.0f;
+    private float PercSpdIncOnRowAdvance = 5.0f;
+    private float EnemySpeedLimit = 1000.0f;
 
     ///game settings
     ///
@@ -62,9 +66,9 @@ public class RAGameManager : MonoBehaviour
     public Transform HeroShipTransform;
 
     // shields
-    public int ShieldAmount = 4;
+    private int ShieldAmount = 4;
     public float ShieldPlacementX;
-    public float ShieldPlacementY;
+    private float ShieldPlacementY;
     public float ShieldPadding;
     public List<GameObject> ShieldList;
 
@@ -73,27 +77,37 @@ public class RAGameManager : MonoBehaviour
     public float GamefieldYMin;
     public float GamefieldYMax;
 
+    [HideInInspector]
     public float HorizontalRangeBorder = 5.0f;
+    [HideInInspector]
     public float CeilingBorder = 5.0f;
-    public float FloorBorder = 5.0f;
+    private float FloorBorder = 5.0f;
+    [HideInInspector]
     public int HeroShotLimit = 1;
+    [HideInInspector]
     public int EnemyShotLimit = 2;
+    [HideInInspector]
     public float EnemyShotDelay = 1.0f;
+    [HideInInspector]
     public float EnemyShotJitter = 0.13f;
-    public float EnemiesContainBulletsBelow = 1.0f;
+    [HideInInspector]
+    public float EnemiesBecomeSmashers = 1.0f;
 
-    [Space]
+    [HideInInspector]
     public float PaddingEnemyX;
+    [HideInInspector]
     public float PaddingEnemyY;
+    [HideInInspector]
     public Vector2 EnemySpawnBegin;
 
-    [Space]
+    [HideInInspector]
     public int EnemyColumns;
+    [HideInInspector]
     public int EnemyRows;
 
     // stats
+    private int LivesStart = 3;
     [Space]
-    public int LivesStart = 3;
     public int LivesRemaining;
     public int CurrentScore;
     public int HiScore;
@@ -131,6 +145,41 @@ public class RAGameManager : MonoBehaviour
         CheckForRoundEnd();
   //      print("02 finishedGameLoop");
 
+    }
+
+    void InjectSoValues()
+    {
+        ShotSpeedMultiplierHero =  soManagerValues.ShotSpeedMultiplierHero;
+        ShotSpeedMultiplierEnemy = soManagerValues.ShotSpeedMultiplierEnemy;
+        MovementSpeedMultiplierHero = soManagerValues.MovementSpeedMultiplierHero;
+        MovementSpeedMultiplierEnemy = soManagerValues.MovementSpeedMultiplierEnemy;
+
+        BeginEnemyMarchSpeed = soManagerValues.BeginEnemyMarchSpeed;
+        EnemyDescendAmount = soManagerValues.EnemyDescendAmount;
+        HeroTravelSpeed = soManagerValues.HeroTravelSpeed;
+
+        PercSpdIncOnEnemyDeath = soManagerValues.PercSpdIncOnEnemyDeath;
+        PercSpdIncOnRowAdvance = soManagerValues.PercSpdIncOnRowAdvance;
+        EnemySpeedLimit = soManagerValues.EnemySpeedLimit;
+
+        ShieldAmount = soManagerValues.ShieldAmount;
+        ShieldPlacementY = soManagerValues.ShieldPlacementY;
+
+        HorizontalRangeBorder = soManagerValues.HorizontalRangeBorder;
+        CeilingBorder = soManagerValues.CeilingBorder;
+        FloorBorder = soManagerValues.FloorBorder;
+        HeroShotLimit = soManagerValues.HeroShotLimit;
+        EnemyShotLimit = soManagerValues.EnemyShotLimit;
+        EnemyShotDelay = soManagerValues.EnemyShotDelay;
+        EnemyShotJitter = soManagerValues.EnemyShotJitter;
+        EnemiesBecomeSmashers = soManagerValues.EnemiesBecomeSmashers;
+        PaddingEnemyX = soManagerValues.PaddingEnemyX;
+        PaddingEnemyY = soManagerValues.PaddingEnemyY;
+        EnemySpawnBegin = soManagerValues.EnemySpawnBegin;
+        EnemyColumns = soManagerValues.EnemyColumns;
+        EnemyRows = soManagerValues.EnemyRows;
+
+        LivesStart = soManagerValues.LivesStart;
     }
 
 
@@ -228,6 +277,7 @@ public class RAGameManager : MonoBehaviour
 
     void Start()
     {
+        InjectSoValues();
         enemyMarchingController = GetComponent<EnemyMarchingController>();
         bulletManager = GetComponent<BulletManager>();
         poolManager = GetComponent<PoolManager>();
@@ -356,13 +406,13 @@ public class RAGameManager : MonoBehaviour
 
     public void IncreaseEnemySpeedAtDeath()
     {
-        float newSpeed = PercentageSpeedIncOnEnemyDeath;
+        float newSpeed = PercSpdIncOnEnemyDeath;
         IncreaseEnemySpeedByPercent(newSpeed);
     }
 
     public void IncreaseEnemySpeedAtRowAdvance()
     {
-        float newSpeed = PercentageSpeedIncOnRowAdvance;
+        float newSpeed = PercSpdIncOnRowAdvance;
         IncreaseEnemySpeedByPercent(newSpeed);
     }
 

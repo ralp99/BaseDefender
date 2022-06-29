@@ -11,8 +11,8 @@ public class EnemyMarchingController : MonoBehaviour
     private float lastPlacedEnemyY;
     private float paddingEnemyX;
     private float paddingEnemyY;
-    public float enemyShotDelay;
-    public float enemyShotJitter;
+    private float enemyShotDelay;
+    private float enemyShotJitter;
 
     float newYpos = 0;
     int rowCounter = 0;
@@ -42,7 +42,7 @@ public class EnemyMarchingController : MonoBehaviour
         paddingEnemyY = rAGameManager.PaddingEnemyY;
         enemyShotDelay = rAGameManager.EnemyShotDelay;
         enemyShotJitter = rAGameManager.EnemyShotJitter;
-        enemiesContainBulletsBelow = rAGameManager.EnemiesContainBulletsBelow;
+        enemiesContainBulletsBelow = rAGameManager.EnemiesBecomeSmashers;
 
         enemySpawnBegin = rAGameManager.EnemySpawnBegin;
     }

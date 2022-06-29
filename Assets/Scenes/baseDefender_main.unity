@@ -205,6 +205,7 @@ MonoBehaviour:
   uIController: {fileID: 0}
   RunAtStart: 1
   FireButtonPressed: 0
+  soManagerValues: {fileID: 11400000, guid: 9d07912012f49d34297a51fe7d00f71e, type: 2}
   ShotSpeedMultiplierHero: 0.2
   ShotSpeedMultiplierEnemy: 0.2
   MovementSpeedMultiplierHero: 1

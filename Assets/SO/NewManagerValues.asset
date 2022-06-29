@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d3e52f83ee8f504b9cfb4f7b0f686d5, type: 3}
+  m_Name: NewManagerValues
+  m_EditorClassIdentifier: 
+  ShotSpeedMultiplierHero: 0.2
+  ShotSpeedMultiplierEnemy: 0.2
+  MovementSpeedMultiplierHero: 1
+  MovementSpeedMultiplierEnemy: 1
+  BeginEnemyMarchSpeed: 0.0067
+  EnemyDescendAmount: 0.5
+  HeroTravelSpeed: 0.055
+  PercSpdIncOnEnemyDeath: 0.52
+  PercSpdIncOnRowAdvance: 0.15
+  EnemySpeedLimit: 0.8
+  ShieldAmount: 4
+  ShieldPlacementY: 6
+  HorizontalRangeBorder: 5
+  CeilingBorder: 5
+  FloorBorder: 5
+  HeroShotLimit: 1
+  EnemyShotLimit: 2
+  EnemyShotDelay: 1
+  EnemyShotJitter: 0.13
+  EnemiesBecomeSmashers: 8
+  PaddingEnemyX: 3
+  PaddingEnemyY: 4
+  EnemySpawnBegin: {x: -15, y: 20}
+  EnemyColumns: 11
+  EnemyRows: 5
+  LivesStart: 3
