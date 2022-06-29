@@ -69,7 +69,6 @@ public class RAGameManager : MonoBehaviour
     private int ShieldAmount = 4;
     public float ShieldPlacementX;
     private float ShieldPlacementY;
-    public float ShieldPadding;
     public List<GameObject> ShieldList;
 
     public float GamefieldXMin;
@@ -309,7 +308,7 @@ public class RAGameManager : MonoBehaviour
     {
         StartCoroutine(enemyMarchingController.SpawnEnemySet());
         CreateHeroShipTransform();
-        CreateShields();
+        StartCoroutine(CreateShields());
     }
 
 
@@ -345,20 +344,35 @@ public class RAGameManager : MonoBehaviour
         HeroShipTransform.SetParent(GameParent);
     }
 
-    void CreateShields()
+
+
+    IEnumerator CreateShields()
     {
 
-       // return;
-
-       // float fieldWidth = GamefieldXMax - GamefieldXMin;
-        float lastXpos = ShieldPlacementX;
-        /*
-        float increaseAmount = ShieldPadding;
-        if (increaseAmount < 0)
+        while (GamefieldXMax == 0)
         {
-            increaseAmount = increaseAmount * -1;
+            yield return null;
         }
-        */
+
+        List<float> ShieldXposList = new List<float>();
+        float wholeFieldLength = GamefieldXMax - GamefieldXMin;
+        float xPos = wholeFieldLength / ShieldAmount;
+
+        for (int i = 0; i < ShieldAmount; i++)
+        {
+            float newUsePos = 0;
+            if (i == 0)
+            {
+                newUsePos = (xPos + GamefieldXMin) - (xPos/2);
+            }
+            else
+            {
+                newUsePos = ShieldXposList[i - 1] + xPos;
+            }
+
+            ShieldXposList.Add(newUsePos);
+        }
+
         if (ShieldList.Count>0)
         {
             for (int i = 0; i < ShieldList.Count; i++)
@@ -369,28 +383,16 @@ public class RAGameManager : MonoBehaviour
         }
 
 
-
-        for (int i = 0; i < ShieldAmount; i++)
+        for (int i = 0; i < ShieldXposList.Count; i++)
         {
             GameObject newShield = Instantiate(ShieldSource) as GameObject;
             Transform shieldTransform = newShield.transform;
             ShieldList.Add(newShield);
 
             shieldTransform.SetParent(GameParent);
-
-            /*
-            if (i == 0)
-            {
-                lastXpos = 
-            }
-            */
-
-            shieldTransform.localPosition = new Vector3(lastXpos, ShieldPlacementY, 0);
-
-            lastXpos += ShieldPadding;
-
-
+            shieldTransform.localPosition = new Vector3(ShieldXposList[i], ShieldPlacementY, 0);
         }
+
     }
 
     public void AddToScore(int addValue)
