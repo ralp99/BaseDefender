@@ -22,8 +22,8 @@ MonoBehaviour:
   BonusShipSpeed: 0.1
   PcntSpdIncOnEnemyDeath: 0.512
   PcntSpdIncOnRowAdvance: 0.142
-  PcntSpdIncOnEnemyDeathIncs: 0.006
-  PcntSpdIncOnRowAdvanceIns: 0.006
+  PcntSpdIncOnEnemyDeathIncs: 0.008
+  PcntSpdIncOnRowAdvanceIns: 0.008
   EnemySpeedLimit: 0.8
   ShieldAmount: 4
   ShieldPlacementY: 0.144

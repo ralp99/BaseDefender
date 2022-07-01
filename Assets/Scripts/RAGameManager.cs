@@ -308,7 +308,7 @@ public class RAGameManager : MonoBehaviour
         LivesRemaining--;
 
         // see if game over, or if next round
-        if (LivesRemaining > 0)
+        if (LivesRemaining >= 0)
         {
             CreateHeroShipTransform();
         }
@@ -421,7 +421,6 @@ public class RAGameManager : MonoBehaviour
         HeroShipTransform.SetParent(GameParent);
     }
 
-
     IEnumerator CreateShields()
     {
 
@@ -430,52 +429,60 @@ public class RAGameManager : MonoBehaviour
             yield return null;
         }
 
-        // destroy existing shield objects
+        // reactivate existing shields
         if (ShieldList.Count > 0)
         {
             for (int i = 0; i < ShieldList.Count; i++)
             {
-                Destroy(ShieldList[i]);
+                Transform currentShield = ShieldList[i].transform;
+                foreach (Transform child in currentShield)
+                {
+                    child.gameObject.SetActive(true);
+                }
             }
-            ShieldList.Clear();
         }
 
-
-        // get shields Y position
-        float  useYplacement = Mathf.Lerp(GamefieldYMin, GamefieldYMax, ShieldPlacementY);
-
-
-        // populate a list of shields X positions
-        List<float> ShieldXposList = new List<float>();
-        float wholeFieldLength = GamefieldXMax - GamefieldXMin;
-        float xPos = wholeFieldLength / ShieldAmount;
-
-        for (int i = 0; i < ShieldAmount; i++)
+        else
         {
-            float newUsePos = 0;
-            if (i == 0)
+            // instantiating new shields
+
+            // get shields Y position
+            float useYplacement = Mathf.Lerp(GamefieldYMin, GamefieldYMax, ShieldPlacementY);
+
+            // populate a list of shields X positions
+            List<float> ShieldXposList = new List<float>();
+            float wholeFieldLength = GamefieldXMax - GamefieldXMin;
+            float xPos = wholeFieldLength / ShieldAmount;
+
+            for (int i = 0; i < ShieldAmount; i++)
             {
-                newUsePos = (xPos + GamefieldXMin) - (xPos/2);
+                float newUsePos = 0;
+                if (i == 0)
+                {
+                    newUsePos = (xPos + GamefieldXMin) - (xPos / 2);
+                }
+                else
+                {
+                    newUsePos = ShieldXposList[i - 1] + xPos;
+                }
+
+                ShieldXposList.Add(newUsePos);
             }
-            else
+
+            for (int i = 0; i < ShieldXposList.Count; i++)
             {
-                newUsePos = ShieldXposList[i - 1] + xPos;
+                GameObject newShield = Instantiate(ShieldSource) as GameObject;
+                Transform shieldTransform = newShield.transform;
+                ShieldList.Add(newShield);
+
+                shieldTransform.SetParent(GameParent);
+                shieldTransform.localPosition = new Vector3(ShieldXposList[i], useYplacement, 0);
             }
-
-            ShieldXposList.Add(newUsePos);
         }
-   
-        for (int i = 0; i < ShieldXposList.Count; i++)
-        {
-            GameObject newShield = Instantiate(ShieldSource) as GameObject;
-            Transform shieldTransform = newShield.transform;
-            ShieldList.Add(newShield);
-
-            shieldTransform.SetParent(GameParent);
-            shieldTransform.localPosition = new Vector3(ShieldXposList[i], useYplacement, 0);
-        }
-
     }
+
+
+
 
     int HiscorePPrefCheck()
     {
