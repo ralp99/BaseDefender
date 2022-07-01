@@ -19,6 +19,7 @@ MonoBehaviour:
   BeginEnemyMarchSpeed: 1
   EnemyDescendAmount: 0.5
   HeroTravelSpeed: 0.055
+  BonusShipSpeed: 1
   PercSpdIncOnEnemyDeath: 0.52
   PercSpdIncOnRowAdvance: 0.15
   EnemySpeedLimit: 0.8
@@ -41,3 +42,4 @@ MonoBehaviour:
   LivesStart: 3
   BonusShipDelay: 30
   BonusShipJitter: 5
+  BonusShipAppearancesPerRound: 3

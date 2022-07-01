@@ -6,26 +6,40 @@ using UnityEngine.UI;
 public class UIController : MonoBehaviour
 {
 
-    public Text ScoreText;
+    public Text CurrentScoreText;
     public Text HiscoreText;
+    public Text CurrentLevelText;
+    public Text TopLevelText;
     public GameObject CanvasObject;
     RAGameManager rAGameManager;
 
-    void Start()
+    void GameManagerCheck()
     {
-        rAGameManager = RAGameManager.Instance;
+        if (!rAGameManager)
+        {
+            rAGameManager = RAGameManager.Instance;
+        }
     }
 
      void UpdateScore(int newScore)
     {
-        ScoreText.text = ("Score: "+rAGameManager.CurrentScore);
+        CurrentScoreText.text = ("Score: "+rAGameManager.CurrentScore);
     }
 
      void UpdateHighscore()
     {
         HiscoreText.text = ("Hi Score: "+ rAGameManager.HiScore);
     }
- 
+
+    void UpdateLevel(int newLevel)
+    {
+        CurrentLevelText.text = ("Level: " + rAGameManager.CurrentGameLevel);
+    }
+
+    void UpdateTopLevel()
+    {
+        TopLevelText.text = ("Top Level: " + rAGameManager.TopGameLevel);
+    }
 
     public void ClickEvents_NewGameStart()
     {
@@ -35,6 +49,14 @@ public class UIController : MonoBehaviour
     public void UIVisibility(bool state)
     {
         CanvasObject.SetActive(state);
+        if (state)
+        {
+            GameManagerCheck();
+            UpdateHighscore();
+            UpdateTopLevel();
+            UpdateScore(rAGameManager.CurrentScore);
+            UpdateLevel(rAGameManager.CurrentGameLevel);
+        }
     }
 
 

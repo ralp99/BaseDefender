@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class BonusShipManager : MonoBehaviour
 {
-    private bool bonusShipGoingLeft = false;
-
     private float bonusShipDelay;
     private float bonusShipJitter;
     private float usingDelay;
@@ -40,8 +38,28 @@ public class BonusShipManager : MonoBehaviour
 
     void BonusShipAppear()
     {
-        bonusShipGoingLeft = !bonusShipGoingLeft;
-        print("02 - BSP appears -- "+bonusShipGoingLeft);
+       // print("02 - BSP appears -- ");
+        if (!rAGameManager.RegisteredBonusShip)
+        {
+            GameObject bonusShip = Instantiate(rAGameManager.EnemyBonusShipObjectSource) as GameObject;
+            rAGameManager.RegisteredBonusShip = bonusShip;
+
+            Transform bonusShipTransform = bonusShip.transform;
+            bonusShipTransform.SetParent(rAGameManager.GameParent);
+
+            Vector3 shipTransform = bonusShipTransform.localPosition;
+            float xPos = shipTransform.x;
+            float zPos = shipTransform.z;
+            float yPos = Mathf.Lerp(rAGameManager.GamefieldYMin, rAGameManager.GamefieldYMax,
+              rAGameManager.BonusShipPlacementY);
+
+            bonusShip.transform.localPosition = new Vector3(xPos, yPos, zPos);
+        }
+        else
+        {
+            rAGameManager.RegisteredBonusShip.SetActive(true);
+        }
+
     }
 
     public void StartBonusShipTimer()
@@ -56,7 +74,6 @@ public class BonusShipManager : MonoBehaviour
 
     public void CancelBonusShipTimer()
     {
-        bonusShipGoingLeft = false;
         appearanceCounter = 0;
         if (cachedBonusTimer != null)
         {
@@ -82,5 +99,9 @@ public class BonusShipManager : MonoBehaviour
         }
     }
 
+    public void ResetAppearanceCounter()
+    {
+        appearanceCounter = 0;
+    }
 
 }

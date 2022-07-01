@@ -23,7 +23,6 @@ public class BulletManager : MonoBehaviour
     private float boundsMaxX;
     private float boundsMaxY;
 
-
     void Start()
     {
         rAGameManager = RAGameManager.Instance;
@@ -51,7 +50,6 @@ public class BulletManager : MonoBehaviour
         }
         else
         {
-            // CRASH HERE AFTER ROUND CLEAR -- dunno if still happens
             bulletTransform.localPosition = spawningCharacter.GetComponent<Transform>().localPosition;  
         }
     }

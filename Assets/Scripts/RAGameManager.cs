@@ -43,17 +43,21 @@ public class RAGameManager : MonoBehaviour
     public float EnemyDescendAmount = 0.0f;
     [HideInInspector]
     public float HeroTravelSpeed = 1.0f;
+    [HideInInspector]
+    public float BonusShipSpeed = 1.0f;
 
-    private float PercSpdIncOnEnemyDeath = 5.0f;
-    private float PercSpdIncOnRowAdvance = 5.0f;
+
+    private float PcntSpdIncOnEnemyDeath = 5.0f;
+    private float PcntSpdIncOnRowAdvance = 5.0f;
+    private float PcntSpdIncOnEnemyDeathIncs = 0.002f;
+    private float PcntSpdIncOnRowAdvanceIns = 0.002f;
+
     private float EnemySpeedLimit = 1000.0f;
 
     ///game settings
-    ///
 
     public bool GameIsPaused;
     public bool GameplayAvailable;
-    public bool GameIsOver;
 
     // sources
     public GameObject EnemyObjectSource;
@@ -67,10 +71,13 @@ public class RAGameManager : MonoBehaviour
     //ingame entities
     public Transform GameParent;
     public Transform HeroShipTransform;
+    public GameObject RegisteredBonusShip;
 
     // shields
     private int ShieldAmount = 4;
     private float ShieldPlacementY;
+    [HideInInspector]
+    public float BonusShipPlacementY;
     public List<GameObject> ShieldList;
 
     public float GamefieldXMin;
@@ -114,11 +121,14 @@ public class RAGameManager : MonoBehaviour
     public float BonusShipJitter;
     [HideInInspector]
     public int BonusShipAppearancesPerRound;
-
+    [HideInInspector]
+    public int BonusLifeAt = 1000;
     [Space]
     public int LivesRemaining;
     public int CurrentScore;
     public int HiScore;
+    public int CurrentGameLevel;
+    public int TopGameLevel;
 
     // pools
     [Space]
@@ -135,6 +145,7 @@ public class RAGameManager : MonoBehaviour
     public bool ResetHiScore;
     [HideInInspector]
     public bool SoValuesInjected;
+    private bool awardedBonusLife;
 
     /// <summary>
     /// notes
@@ -152,10 +163,7 @@ public class RAGameManager : MonoBehaviour
 
         enemyMarchingController.PerformAllEnemyPosChecks(true);
         bulletManager.MoveAllBullets();
-        CheckForLivesEnd();
         CheckForRoundEnd();
-  //      print("02 finishedGameLoop");
-
     }
 
     void InjectSoValues()
@@ -168,13 +176,18 @@ public class RAGameManager : MonoBehaviour
         BeginEnemyMarchSpeed = soManagerValues.BeginEnemyMarchSpeed;
         EnemyDescendAmount = soManagerValues.EnemyDescendAmount;
         HeroTravelSpeed = soManagerValues.HeroTravelSpeed;
+        BonusShipSpeed = soManagerValues.BonusShipSpeed;
 
-        PercSpdIncOnEnemyDeath = soManagerValues.PercSpdIncOnEnemyDeath;
-        PercSpdIncOnRowAdvance = soManagerValues.PercSpdIncOnRowAdvance;
+        PcntSpdIncOnEnemyDeath = soManagerValues.PcntSpdIncOnEnemyDeath;
+        PcntSpdIncOnRowAdvance = soManagerValues.PcntSpdIncOnRowAdvance;
+        PcntSpdIncOnEnemyDeathIncs = soManagerValues.PcntSpdIncOnEnemyDeathIncs;
+        PcntSpdIncOnRowAdvanceIns = soManagerValues.PcntSpdIncOnRowAdvanceIns;
+        
         EnemySpeedLimit = soManagerValues.EnemySpeedLimit;
 
         ShieldAmount = soManagerValues.ShieldAmount;
         ShieldPlacementY = soManagerValues.ShieldPlacementY;
+        BonusShipPlacementY = soManagerValues.BonusShipPlacementY;
 
         HorizontalRangeBorder = soManagerValues.HorizontalRangeBorder;
         CeilingBorder = soManagerValues.CeilingBorder;
@@ -192,6 +205,7 @@ public class RAGameManager : MonoBehaviour
         BonusShipDelay = soManagerValues.BonusShipDelay;
         BonusShipJitter = soManagerValues.BonusShipJitter;
         BonusShipAppearancesPerRound = soManagerValues.BonusShipAppearancesPerRound;
+        BonusLifeAt = soManagerValues.BonusLifeAt;
 
         LivesStart = soManagerValues.LivesStart;
         SoValuesInjected = true;
@@ -218,23 +232,11 @@ public class RAGameManager : MonoBehaviour
         }
     }
 
-
-
-
-    // redundant?
-    void CheckForLivesEnd()
-    {
-        if (LivesRemaining == 0)
-        {
-            GameOver();
-        }
-    }
-
-
-
     public void GameOver()
     {
+        CanRunGameLoop = false;
         int currentHiscore = HiscorePPrefCheck();
+        int currentTopGameLevel = TopGameLevelPPrefCheck();
 
         if (CurrentScore > currentHiscore)
         {
@@ -242,10 +244,26 @@ public class RAGameManager : MonoBehaviour
             PlayerPrefs.SetInt("baseDefenderHiscore", HiScore);
         }
 
-        CanRunGameLoop = false;
+        if (CurrentGameLevel > currentTopGameLevel)
+        {
+            TopGameLevel = CurrentGameLevel;
+            PlayerPrefs.SetInt("baseDefenderTopGameLevel", TopGameLevel);
+        }
+
         enemyMarchingController.KillShotCache();
         ClearEntities();
+
+        if(RegisteredBonusShip)
+        {
+            if (RegisteredBonusShip.activeSelf)
+            {
+                RegisteredBonusShip.SetActive(false);
+            }
+        }
+     
         uIController.UIVisibility(true);
+        CurrentGameLevel = 0;
+        GameplayAvailable = false;
     }
 
     void ClearEntities()
@@ -284,12 +302,14 @@ public class RAGameManager : MonoBehaviour
         }
     }
 
+
     public void HeroKilled()
     {
+        LivesRemaining--;
+
         // see if game over, or if next round
         if (LivesRemaining > 0)
         {
-            LivesRemaining--;
             CreateHeroShipTransform();
         }
         else
@@ -297,6 +317,7 @@ public class RAGameManager : MonoBehaviour
             GameOver();
         }
     }
+
 
 
     private void Awake()
@@ -315,11 +336,15 @@ public class RAGameManager : MonoBehaviour
         bonusShipManager = GetComponent<BonusShipManager>();
         uIController = GetComponent<UIController>();
         uIController.UIVisibility(true);
+
         if (ResetHiScore)
         {
             PlayerPrefs.SetInt("baseDefenderHiscore", 0);
+            PlayerPrefs.SetInt("baseDefenderTopGameLevel", 0);
         }
+
         HiScore = HiscorePPrefCheck();
+        TopGameLevel = TopGameLevelPPrefCheck();
 
         if (RunAtStart)
         {
@@ -333,6 +358,7 @@ public class RAGameManager : MonoBehaviour
     {
         LivesRemaining = LivesStart;
         CurrentScore = 0;
+        awardedBonusLife = false;
         CurrentEnemyMarchSpeed = BeginEnemyMarchSpeed;
         BeginRound();
         heroShipController.HeroShipInit();
@@ -343,9 +369,18 @@ public class RAGameManager : MonoBehaviour
 
     void BeginRound()
     {
+        InvaderColumns.Clear();
         StartCoroutine(enemyMarchingController.SpawnEnemySet());
         CreateHeroShipTransform();
         StartCoroutine(CreateShields());
+        CurrentEnemyMarchSpeed = BeginEnemyMarchSpeed;
+        bonusShipManager.ResetAppearanceCounter();
+        CurrentGameLevel++;
+        if (CurrentGameLevel > 1)
+        {
+            PcntSpdIncOnEnemyDeath = PcntSpdIncOnEnemyDeath + PcntSpdIncOnEnemyDeathIncs;
+            PcntSpdIncOnRowAdvance = PcntSpdIncOnRowAdvance + PcntSpdIncOnRowAdvanceIns;
+        }
     }
 
 
@@ -358,10 +393,15 @@ public class RAGameManager : MonoBehaviour
             FireButtonAction();
         }
 
-        //   GameplayAvailable = GameIsPaused || !CanRunGameLoop;
+        if (GameIsPaused)
+        {
+            GameplayAvailable = false;
+        }
 
-        GameplayAvailable = !GameIsPaused || CanRunGameLoop;
-
+        if (CanRunGameLoop)
+        {
+            GameplayAvailable = true;
+        }
 
         if (!GameplayAvailable)
         {
@@ -442,9 +482,20 @@ public class RAGameManager : MonoBehaviour
         return PlayerPrefs.GetInt("baseDefenderHiscore");
     }
 
+    int TopGameLevelPPrefCheck()
+    {
+        return PlayerPrefs.GetInt("baseDefenderTopGameLevel");
+    }
+
     public void AddToScore(int addValue)
     {
         CurrentScore += addValue;
+        if (CurrentScore > BonusLifeAt && !awardedBonusLife)
+        {
+            LivesRemaining++;
+            awardedBonusLife = true;
+        }
+
         if (HiScore < CurrentScore)
         {
             HiScore = CurrentScore;
@@ -455,13 +506,13 @@ public class RAGameManager : MonoBehaviour
 
     public void IncreaseEnemySpeedAtDeath()
     {
-        float newSpeed = PercSpdIncOnEnemyDeath;
+        float newSpeed = PcntSpdIncOnEnemyDeath;
         IncreaseEnemySpeedByPercent(newSpeed);
     }
 
     public void IncreaseEnemySpeedAtRowAdvance()
     {
-        float newSpeed = PercSpdIncOnRowAdvance;
+        float newSpeed = PcntSpdIncOnRowAdvance;
         IncreaseEnemySpeedByPercent(newSpeed);
     }
 

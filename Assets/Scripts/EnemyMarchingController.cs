@@ -13,11 +13,13 @@ public class EnemyMarchingController : MonoBehaviour
     private float paddingEnemyY;
     private float enemyShotDelay;
     private float enemyShotJitter;
+    private int enemyShotLimit;
 
     float newYpos = 0;
     int rowCounter = 0;
     bool shouldDescend = false;
 
+    private float gamefieldYMin;
     private float furthestEnemyPosLeft;
     private float furthestEnemyPosRight;
     private float furthestEnemyPosDown;
@@ -42,8 +44,9 @@ public class EnemyMarchingController : MonoBehaviour
         enemyShotDelay = rAGameManager.EnemyShotDelay;
         enemyShotJitter = rAGameManager.EnemyShotJitter;
         enemiesContainBulletsBelow = rAGameManager.EnemiesBecomeSmashers;
-
+        gamefieldYMin = rAGameManager.GamefieldYMin;
         enemySpawnBegin = rAGameManager.EnemySpawnBegin;
+        enemyShotLimit = rAGameManager.EnemyShotLimit;
     }
 
 
@@ -91,7 +94,6 @@ public class EnemyMarchingController : MonoBehaviour
         rAGameManager.GamefieldXMin = furthestEnemyPosLeft - rAGameManager.HorizontalRangeBorder;
         rAGameManager.GamefieldYMax = rAGameManager.EnemyPoolActive[rAGameManager.EnemyPoolActive.Count-1].GetComponent<Transform>().localPosition.y +
             rAGameManager.CeilingBorder;
-
         EvaluateBottomRowEnemies();
         rAGameManager.UnlockGameLoop();
         EnemyShotTimerCached = EnemyShotTimer();
@@ -138,7 +140,8 @@ public class EnemyMarchingController : MonoBehaviour
 
         if (rAGameManager.HeroShipTransform)
         {
-            if (checkYpos <= rAGameManager.HeroShipTransform.localPosition.y)
+            // if (checkYpos <= rAGameManager.HeroShipTransform.localPosition.y)
+             if (checkYpos <= gamefieldYMin)
             {
                 rAGameManager.GameOver();
             }
@@ -181,7 +184,7 @@ public class EnemyMarchingController : MonoBehaviour
             {
                 bool canReverseMarch = i == 0;
                 MarchSingleEnemy(currentEnemyTransform, canReverseMarch, marchSpeed, i);
-                SeeIfBottomShouldArm(currentEnemyTransform.gameObject);
+                SeeIfBottomShouldSmash(currentEnemyTransform.gameObject);
             }
         }
     }
@@ -258,7 +261,7 @@ public class EnemyMarchingController : MonoBehaviour
     }
 
 
-    void SeeIfBottomShouldArm(GameObject currentEnemy)
+    void SeeIfBottomShouldSmash(GameObject currentEnemy)
     {
         if (SmasherEnemies.Contains(currentEnemy))
         {
@@ -291,11 +294,20 @@ public class EnemyMarchingController : MonoBehaviour
         EnemyFireProjectile(currentEnemyShooter);
         EnemyShotTimerCached = EnemyShotTimer();
         StartCoroutine(EnemyShotTimerCached);
+        
     }
 
     void EnemyFireProjectile(GameObject currentEnemy)
     {
-        if (rAGameManager.EnemyBulletPoolActive.Count < rAGameManager.EnemyShotLimit)
+
+        int currentShotLimit = enemyShotLimit;
+
+        if (rAGameManager.EnemyPoolActive.Count < 1)
+        {
+            currentShotLimit = 1;
+        }
+
+        if (rAGameManager.EnemyBulletPoolActive.Count < currentShotLimit)
         {
             rAGameManager.bulletManager.SpawnBullet(currentEnemy.GetComponent<CharacterObject>());
         }

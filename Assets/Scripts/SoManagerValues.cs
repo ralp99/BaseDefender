@@ -17,10 +17,16 @@ public class SoManagerValues : ScriptableObject
     public float BeginEnemyMarchSpeed = 0.025f;
     public float EnemyDescendAmount = 0.0f;
     public float HeroTravelSpeed = 1.0f;
+    public float BonusShipSpeed = 1.0f;
 
     [Space]
-    public float PercSpdIncOnEnemyDeath = 5.0f;
-    public float PercSpdIncOnRowAdvance = 5.0f;
+    public float PcntSpdIncOnEnemyDeath = 5.0f;
+    public float PcntSpdIncOnRowAdvance = 5.0f;
+
+    public float PcntSpdIncOnEnemyDeathIncs = 0.002f;
+    public float PcntSpdIncOnRowAdvanceIns = 0.002f;
+
+
     public float EnemySpeedLimit = 1000.0f;
     [Space]
     public int ShieldAmount = 4;
@@ -48,6 +54,7 @@ public class SoManagerValues : ScriptableObject
     public int EnemyRows;
 
     public int LivesStart = 3;
+    public int BonusLifeAt = 1000;
 
     public float BonusShipDelay;
     public float BonusShipJitter;
