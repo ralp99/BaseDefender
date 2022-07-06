@@ -20,10 +20,30 @@ public class Projectile : MonoBehaviour
     public bool FollowSpawner;
 
     RAGameManager rAGameManager;
+    AudioSource audioSource;
+    AudioBank audioBank;
+
+    void AudioBankCheck()
+    {
+        if (audioBank)
+        {
+            return;
+        }
+
+        if (!rAGameManager)
+        {
+            rAGameManager = RAGameManager.Instance;
+        }
+
+        audioBank = rAGameManager.audioBank;
+    }
+
 
     void Start()
     {
         rAGameManager = RAGameManager.Instance;
+        audioSource = GetComponent<AudioSource>();
+        audioBank = rAGameManager.audioBank;
 
         if (MyBulletType == BulletManager.BulletType.HeroStandard)
         {
@@ -42,5 +62,26 @@ public class Projectile : MonoBehaviour
             MyUsingSpeed = OverrideSpeed;
         }
     }
+
+
+    private void OnEnable()
+    {
+        StartCoroutine(EnableAudioFX());
+    }
+
+    IEnumerator EnableAudioFX()
+    {
+        while (audioBank == null || audioSource == null)
+        {
+            yield return null;
+        }
+
+        if (MyBulletType == BulletManager.BulletType.HeroStandard)
+        {
+            audioSource.PlayOneShot(audioBank.HeroBullet_fire);
+        }
+    }
+
+
 
 }

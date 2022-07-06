@@ -44,7 +44,7 @@ public class SoManagerValues : ScriptableObject
     public int EnemyShotLimit = 2;
     public float EnemyShotDelay = 1.0f;
     public float EnemyShotJitter = 0.13f;
-    public float EnemiesBecomeSmashers = 1.0f;
+    public float EnemiesBecomeSmashersOffset = 1.0f;
     [Space]
     public float PaddingEnemyX;
     public float PaddingEnemyY;

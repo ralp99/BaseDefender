@@ -24,7 +24,7 @@ public class EnemyMarchingController : MonoBehaviour
     private float furthestEnemyPosRight;
     private float furthestEnemyPosDown;
     private bool enemiesMarchLeft = true;
-    private float enemiesContainBulletsBelow;
+    private float enemiesBecomeSmashers;
 
     public Dictionary<GameObject, SoInvaderColumn> Ass_Enemy_ColumnSO = new Dictionary<GameObject, SoInvaderColumn>();
 
@@ -43,10 +43,15 @@ public class EnemyMarchingController : MonoBehaviour
         paddingEnemyY = rAGameManager.PaddingEnemyY;
         enemyShotDelay = rAGameManager.EnemyShotDelay;
         enemyShotJitter = rAGameManager.EnemyShotJitter;
-        enemiesContainBulletsBelow = rAGameManager.EnemiesBecomeSmashers;
         gamefieldYMin = rAGameManager.GamefieldYMin;
         enemySpawnBegin = rAGameManager.EnemySpawnBegin;
         enemyShotLimit = rAGameManager.EnemyShotLimit;
+    }
+
+
+    public void SetSmashActivateHeight(float yValue)
+    {
+          enemiesBecomeSmashers = yValue;
     }
 
 
@@ -184,7 +189,7 @@ public class EnemyMarchingController : MonoBehaviour
             {
                 bool canReverseMarch = i == 0;
                 MarchSingleEnemy(currentEnemyTransform, canReverseMarch, marchSpeed, i);
-                SeeIfBottomShouldSmash(currentEnemyTransform.gameObject);
+                SeeIfBottomRowShouldSmash(currentEnemyTransform.gameObject);
             }
         }
     }
@@ -251,8 +256,7 @@ public class EnemyMarchingController : MonoBehaviour
         {
             SoInvaderColumn currentColumn = rAGameManager.InvaderColumns[i];
 
-            //  if (currentColumn.EnemyColumn != null)
-              if (currentColumn.EnemyColumn.Count > 0)
+            if (currentColumn.EnemyColumn.Count > 0)
             {
                 GameObject currentEnemy = currentColumn.EnemyColumn[0];
                 BottomRowEnemies.Add(currentEnemy);
@@ -261,7 +265,7 @@ public class EnemyMarchingController : MonoBehaviour
     }
 
 
-    void SeeIfBottomShouldSmash(GameObject currentEnemy)
+    void SeeIfBottomRowShouldSmash(GameObject currentEnemy)
     {
         if (SmasherEnemies.Contains(currentEnemy))
         {
@@ -270,7 +274,7 @@ public class EnemyMarchingController : MonoBehaviour
 
         Transform enemyTransform = currentEnemy.transform;
 
-        if (enemyTransform.localPosition.y < enemiesContainBulletsBelow)
+        if (enemyTransform.localPosition.y < enemiesBecomeSmashers)
         {
         //    print("adding smasher enemy");
             SmasherEnemies.Add(currentEnemy);

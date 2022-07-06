@@ -19,6 +19,8 @@ public class RAGameManager : MonoBehaviour
     HeroShipController heroShipController;
     [HideInInspector]
     BonusShipManager bonusShipManager;
+    [HideInInspector]
+    public AudioBank audioBank;
 
     public enum CharacterType { Hero, StandardEnemy, BonusShip, Shield}
 
@@ -66,6 +68,7 @@ public class RAGameManager : MonoBehaviour
     public GameObject HeroBulletSource;
     public GameObject EnemyBulletSource;
     public GameObject ShieldSource;
+    public GameObject ExplodeObjectSource;
     public SoInvaderColumn EnemyColumnSOs;
 
     //ingame entities
@@ -99,7 +102,7 @@ public class RAGameManager : MonoBehaviour
     [HideInInspector]
     public float EnemyShotJitter = 0.13f;
     [HideInInspector]
-    public float EnemiesBecomeSmashers = 1.0f;
+    public float EnemiesBecomeSmashersOffset = 1.0f;
 
     [HideInInspector]
     public float PaddingEnemyX;
@@ -196,7 +199,7 @@ public class RAGameManager : MonoBehaviour
         EnemyShotLimit = soManagerValues.EnemyShotLimit;
         EnemyShotDelay = soManagerValues.EnemyShotDelay;
         EnemyShotJitter = soManagerValues.EnemyShotJitter;
-        EnemiesBecomeSmashers = soManagerValues.EnemiesBecomeSmashers;
+        EnemiesBecomeSmashersOffset = soManagerValues.EnemiesBecomeSmashersOffset;
         PaddingEnemyX = soManagerValues.PaddingEnemyX;
         PaddingEnemyY = soManagerValues.PaddingEnemyY;
         EnemySpawnBegin = soManagerValues.EnemySpawnBegin;
@@ -334,6 +337,7 @@ public class RAGameManager : MonoBehaviour
         poolManager = GetComponent<PoolManager>();
         heroShipController = GetComponent<HeroShipController>();
         bonusShipManager = GetComponent<BonusShipManager>();
+        audioBank = GetComponent<AudioBank>();
         uIController = GetComponent<UIController>();
         uIController.UIVisibility(true);
 
@@ -411,7 +415,6 @@ public class RAGameManager : MonoBehaviour
         GameLoop();
     }
 
-
     void CreateHeroShipTransform()
     {
         DestroyHeroTransform();
@@ -478,6 +481,8 @@ public class RAGameManager : MonoBehaviour
                 shieldTransform.SetParent(GameParent);
                 shieldTransform.localPosition = new Vector3(ShieldXposList[i], useYplacement, 0);
             }
+
+            enemyMarchingController.SetSmashActivateHeight(EnemiesBecomeSmashersOffset + useYplacement);
         }
     }
 

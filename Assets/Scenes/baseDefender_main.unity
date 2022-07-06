@@ -167,6 +167,7 @@ GameObject:
   - component: {fileID: 556115959}
   - component: {fileID: 556115960}
   - component: {fileID: 556115961}
+  - component: {fileID: 556115962}
   m_Layer: 0
   m_Name: gameManager
   m_TagString: Untagged
@@ -204,6 +205,7 @@ MonoBehaviour:
   bulletManager: {fileID: 0}
   poolManager: {fileID: 0}
   uIController: {fileID: 0}
+  audioBank: {fileID: 0}
   RunAtStart: 1
   FireButtonPressed: 0
   soManagerValues: {fileID: 11400000, guid: 9d07912012f49d34297a51fe7d00f71e, type: 2}
@@ -227,6 +229,8 @@ MonoBehaviour:
     type: 3}
   ShieldSource: {fileID: 768836384819544259, guid: c231bd3426ac87342b94a5891ebe3cf3,
     type: 3}
+  ExplodeObjectSource: {fileID: 768836384819544259, guid: e3e1bf7a69742414191464b16f825a0f,
+    type: 3}
   EnemyColumnSOs: {fileID: 11400000, guid: 5d00999c97bf6a34c86dee22e99a29dc, type: 2}
   GameParent: {fileID: 1731169628}
   HeroShipTransform: {fileID: 0}
@@ -243,7 +247,7 @@ MonoBehaviour:
   EnemyShotLimit: 2
   EnemyShotDelay: 1
   EnemyShotJitter: 0.13
-  EnemiesBecomeSmashers: 1
+  EnemiesBecomeSmashersOffset: 1
   PaddingEnemyX: 3
   PaddingEnemyY: 4
   EnemySpawnBegin: {x: -15, y: 20}
@@ -384,6 +388,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e773dc1328732934e8e7a172f74ca273, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &556115962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 556115952}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c99de2a3faed53c4da775bf316623ef8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HeroBullet_fire: {fileID: 8300000, guid: 5bcbc21320050ee47b73a4a5556a3c3a, type: 3}
+  HeroBullet_reachLimit: {fileID: 8300000, guid: a9102807a377ee2499f30b2aa9c74ba7,
+    type: 3}
+  HeroBullet_killEnemy: {fileID: 8300000, guid: e576fac5e50cd354eb7a9b33a112b375,
+    type: 3}
+  EnemyBullet_HitShield: {fileID: 8300000, guid: 0c7887c75f23ee740abe2d254b95848a,
+    type: 3}
+  EnemyBullet_HitPlayer: {fileID: 8300000, guid: 1cd79bec70763324a8980d31fefd0688,
+    type: 3}
 --- !u!1 &604315448
 GameObject:
   m_ObjectHideFlags: 0
